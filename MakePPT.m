@@ -1,4 +1,5 @@
-% Make ppt for Cycler and current running cells.  
+% Make ppt for Cycler and current running cells, and then email the
+% results.
 % Peter Attia and Nick Perkins 
 %% Import Power point generator app
 import mlreportgen.ppt.*

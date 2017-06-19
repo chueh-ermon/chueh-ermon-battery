@@ -78,7 +78,7 @@ for j=1:numel(CA_array)
     end
     cd 'C://Data'
 end 
-%% Convert to PDF and Email to Big Mike.
+%% Convert to PDF and email to the list
 close(slides);
 pptview(slidesFile,'converttopdf');
 pdf_name=string(slidesFile);

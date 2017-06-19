@@ -123,9 +123,7 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
             hold on
             yyaxis right
             plot(cycle_time(i2a:i2b)./60,Charge_cap(i2a:i2b),'-','Color',...
-                hsv(j/100), 'LineWidth', 1.5);
-            % plot(cycle_time(i2a:i2b)./60,Charge_cap(i2a:i2b),'-','Color',...
-                % color_array{fix(j/100)+1},'LineWidth',1.5);
+                color_array{fix(j/100)+1},'LineWidth',1.5);
             ylabel('Charge Capacity (Ah)')
             
         end

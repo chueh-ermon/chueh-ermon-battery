@@ -119,8 +119,9 @@ for j= 1:numel(CA_array)
             num2str(numel(test_files)) ':  ' filename])
             %% Run CSV Analysis 
             ResultData = csvread(strcat(thisdir,'\',test_files{i}),1,1);
-            [Charge_time,dDQdV,End_of_life, cycle, ~, DQ, cell_ID1, test_time]...
-                =BatchDA(ResultData, j, CA_array{j}, barcodes{i});
+            [Charge_time,dDQdV,End_of_life, cycle, ~, DQ, cell_ID1, ...
+                test_time]=BatchDA(ResultData, j, CA_array{j}, ...
+                barcodes{i});
             num_batt=num_batt+1;
             
             cap_array=[cap_array,DQ];
@@ -156,8 +157,8 @@ end
 %% Plot Summary figure
 close all
 % Plot the summary figures 
-[deg_rates]=plot_spread(master_cycle,cap_array,charge_time,time_evol,master_capacity,... 
-    CA_array, cyc_array, master_test_time);
+[deg_rates]=plot_spread(master_cycle,cap_array,charge_time,time_evol, ...
+    master_capacity, CA_array, cyc_array, master_test_time);
 figure(51)
 savefig(strcat(Date,'_',fast_charge,'_current_spread'))
 print(strcat(Date,'_',fast_charge,'_current_spread'),'-dpng')

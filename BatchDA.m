@@ -47,7 +47,8 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
         [0,0,102]./256; [0,0,77]./256; [0,0,51]./256; [0,0,26]./256; ...
         [0,0,0]};
     % Cycle legends2
-    legend_array={'100'; '200'; '300'; '400'; '500';'600';'700';'800';'900';'1000'};
+    legend_array={'100'; '200'; '300'; '400'; '500';'600';'700';'800'; ...
+        '900';'1000'};
     % Translate charging algorithm to something we can put in a legend.
     t = alg;
     t2 = strrep(t, '_' , '.' );
@@ -97,7 +98,8 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
             figure(cell_ID1)
             subplot(2,4,8)
             [IDC,xVoltage2]=IDCA(Discharge_cap(i3a:i3b),Voltage(i3a:i3b));
-            plot(xVoltage2,IDC,'Color',color_array{fix(j/100)+1},'LineWidth',1.5);
+            plot(xVoltage2,IDC,'Color',color_array{fix(j/100)+1}, ...
+                'LineWidth',1.5);
             hold on
             xlabel('Voltage (Volts)')
             ylabel('dQ/dV (Ah/V)')
@@ -129,8 +131,8 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
             ylabel('Current (C-Rate)')
             hold on
             yyaxis right
-            plot(cycle_time(i2a:i2b)./60,Charge_cap(i2a:i2b),'-','Color',...
-                color_array{fix(j/100)+1},'LineWidth',1.5);
+            plot(cycle_time(i2a:i2b)./60,Charge_cap(i2a:i2b),'-',...
+                'Color', color_array{fix(j/100)+1},'LineWidth',1.5);
             ylabel('Charge Capacity (Ah)')
             
         end
@@ -162,7 +164,8 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
     %% Plot Summary Statistics
      figure(cell_ID1)
         subplot(2,4,8)
-        legend(legend_array{1:(fix(j/100))},'Location','eastoutside','Orientation','vertical')
+        legend(legend_array{1:(fix(j/100))},'Location','eastoutside', ...
+            'Orientation','vertical')
     % Export Charge Capacity and correct if errant charge
     if j>5
         [sorted_C, ind]=sort(C_in,'descend');

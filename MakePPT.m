@@ -25,7 +25,8 @@ replace(slide1,'Title','Current Cycling Progress');
 replace(slide1,'Subtitle',{'Arbin LBT',date});
 %% Add Summary Figures 
 summary_slide = add(slides,'Blank');
-pic = Picture(which(strcat(batchdate,'_',charging_family,'_current_spread.png')));
+pic = Picture(which(strcat(batchdate,'_',charging_family, ...
+    '_current_spread.png')));
 pic.X = '0in';
 pic.Y = '0in';
 pic.Width = '13.33in';
@@ -33,7 +34,8 @@ pic.Height = '7.41in';
 add(summary_slide,pic);
 
 summary_slide2 = add(slides,'Blank');
-pic = Picture(which(strcat(batchdate,'_',charging_family,'_time_vs_capacity.png')));
+pic = Picture(which(strcat(batchdate,'_',charging_family, ...
+    '_time_vs_capacity.png')));
 pic.X = '0in';
 pic.Y = '0in';
 pic.Width = '13.33in';
@@ -41,7 +43,8 @@ pic.Height = '7.41in';
 add(summary_slide2,pic);
 
 summary_slide3 = add(slides,'Blank');
-pic = Picture(which(strcat(batchdate,'_',charging_family,'_degradation_rate.png')));
+pic = Picture(which(strcat(batchdate,'_',charging_family, ...
+    '_degradation_rate.png')));
 pic.X = '0in';
 pic.Y = '0in';
 pic.Width = '13.33in';
@@ -84,5 +87,6 @@ pptview(slidesFile,'converttopdf');
 pdf_name=string(slidesFile);
 pdf_name=erase(pdf_name,'.pptx');
 pdf_name=strcat(pdf_name,'.pdf');
-messageBody = 'Hot off the press: Check out the latest results!      ';
-%sendemail('mchen18','BMS project: Updated results', messageBody,char(pdf_name));
+messageBody = 'Hot off the press: Check out the latest results!';
+%sendemail('mchen18','BMS project: Updated results', ...
+%    messageBody,char(pdf_name));

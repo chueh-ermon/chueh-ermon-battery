@@ -5,8 +5,8 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
 %   Reads in csv data file and plots and exports resulting plots and stats.
 %   Starts with CE, then Runs dQdV
 %   What else...
-% Total Test time
-    Total_time=ResultData(:,1);
+    % Total Test time
+    Total_time=ResultData(:,1); 
     % Unix Date Time
     Date_time=ResultData(:,2);
     % Time for individual step

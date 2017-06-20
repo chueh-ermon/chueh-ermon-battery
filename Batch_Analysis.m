@@ -11,7 +11,9 @@ function [filenames, cap_array, CA_array, charge_time, master_capacity, ...
 %   - Example Batch_Analysis('Date started (YYYY-MM-DD)', 'Charge
 %     condition' ex. 'C' for all of them or '5_4C' for 5.4 C step.
 close all
-cd 'C://Data'
+% cd 'C://Data'
+cd '/Users/ziyang/Desktop/2017_Chueh_Ermon_Research/test_data'
+
 
 %% Initialize Summary Arrays and values
 % Holds all Discharge dQdV curves
@@ -68,7 +70,14 @@ for i=1:numel(filenames)
     meta=strfind(filenames{i},'Meta');
     if isempty(meta) == 0
         % If so then read the cell barcode from the metadata
-        [~, text_data] = xlsread(filenames{i});
+        if ispc
+            [~, text_data] = xlsread(filenames{i});
+        else
+            fprintf('ERROR: MacOS and Linux cannot run xlsread on a csv');
+            %file_id = fopen(filenames{i})
+            %text_data = textscan(file_id, 
+            %fclose(file_id)
+        
         cell_ID=string(text_data{2,10});
         % Here would be where to remove other Metadata info 
         barcodes=[barcodes,cell_ID];

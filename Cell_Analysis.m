@@ -110,7 +110,8 @@ fprintf("in Cell_Analysis")
             ylabel('dQ/dV (Ah/V)')
             % save as mat after each plot
             
-            cd ../charging_algorithm
+            cd ..
+            cd(charging_algorithm)
             savefig(strcat(charging_algorithm, '_', cell_ID, '_dQdV'))
             
             %% Plot Voltage Curve

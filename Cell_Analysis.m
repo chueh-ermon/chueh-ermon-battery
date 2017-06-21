@@ -7,7 +7,9 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
 %   Starts with CE, then Runs dQdV
 %   What else...
 
+% TODO: remove next line later
 fprintf("in Cell_Analysis")
+
     % Total Test time
     Total_time=ResultData(:,1); 
     % Unix Date Time
@@ -108,7 +110,7 @@ fprintf("in Cell_Analysis")
             ylabel('dQ/dV (Ah/V)')
             % save as mat after each plot
             
-            cd charging_algorithm
+            cd ../charging_algorithm
             savefig(strcat(charging_algorithm, '_', cell_ID, '_dQdV'))
             
             %% Plot Voltage Curve

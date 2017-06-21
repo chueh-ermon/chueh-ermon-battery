@@ -11,8 +11,16 @@ function [filenames, cap_array, CA_array, charge_time, master_capacity, ...
 %   - Example Batch_Analysis('Date started (YYYY-MM-DD)', 'Charge
 %     condition' ex. 'C' for all of them or '5_4C' for 5.4 C step.
 close all
+
+% chose which data folder according to OS used - temporary: test purposes
+if ispc
+    cd 'C://Data'
+else
+    cd '/Users/ziyang/Desktop/2017_Chueh_Ermon_Research/test_data'
+% TODO: delete between above comment and this comment
+
+% TODO: uncomment next line
 % cd 'C://Data'
-cd '/Users/ziyang/Desktop/2017_Chueh_Ermon_Research/test_data'
 
 
 %% Initialize Summary Arrays and values

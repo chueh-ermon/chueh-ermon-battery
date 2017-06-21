@@ -85,7 +85,7 @@ for i=1:numel(filenames)
             %file_id = fopen(filenames{i})
             %text_data = textscan(file_id, 
             %fclose(file_id)
-        
+        end
         cell_ID=string(text_data{2,10});
         % Here would be where to remove other Metadata info 
         barcodes=[barcodes,cell_ID];
@@ -137,7 +137,7 @@ for j= 1:numel(CA_array)
             %% Run CSV Analysis 
             ResultData = csvread(strcat(thisdir,'\',test_files{i}),1,1);
             [Charge_time,dDQdV,End_of_life, cycle, ~, DQ, cell_ID1, ...
-                test_time]=BatchDA(ResultData, j, CA_array{j}, ...
+                test_time]=CellAnalysis(ResultData, j, CA_array{j}, ...
                 barcodes{i}, charging_algorithm);
             num_batt=num_batt+1;
             

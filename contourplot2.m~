@@ -34,36 +34,18 @@ for i=1:length(time_vector)
     if time_vector(i) == 10
         subplot(2,length(time_vector)/2,4)
         Q1=30:5:80;
-        CC1=4.8:0.2:6;
+        CC1=5:0.2:6;
         [X,Y] = meshgrid(CC1,Q1);
         CC2 = [(time_vector(i) - (Y./100).*(60./X))./(60.*(0.8-(Y./100)))].^(-1);
         v =[3.8 4 4.2];
         contour(X,Y,CC2,v,'LineWidth',2,'ShowText','on')
     elseif time_vector(i) == 11
         subplot(2,length(time_vector)/2,3)
-        Q1=0:2:75;
-        CC1=4.5:0.2:6.2;
-        [X,Y] = meshgrid(CC1,Q1);
-        CC2 = [(time_vector(i) - (Y./100).*(60./X))./(60.*(0.8-(Y./100)))].^(-1);
-        v =[3.8 4 4.2];
-        contour(X,Y,CC2,v,'LineWidth',2,'ShowText','on')
     elseif time_vector(i) == 12
         subplot(2,length(time_vector)/2,2)
-        Q1=5:5:50;
-        CC1=3:0.2:6;
-        [X,Y] = meshgrid(CC1,Q1);
-        CC2 = [(time_vector(i) - (Y./100).*(60./X))./(60.*(0.8-(Y./100)))].^(-1);
-        v =[3.8 4 4.2];
-        contour(X,Y,CC2,v,'LineWidth',2,'ShowText','on')
     else
-        subplot(2,length(time_vector)/2,1)
-        Q1=0:5:69;
-        CC1=3:0.2:4;
-        [X,Y] = meshgrid(CC1,Q1);
-        CC2 = [(time_vector(i) - (Y./100).*(60./X))./(60.*(0.8-(Y./100)))].^(-1);
-        v =[3.8 4 4.2];
-        contour(X,Y,CC2,v,'LineWidth',2,'ShowText','on')
-    end
+        
+
         
 end
 % 
@@ -134,5 +116,5 @@ for i = 1:length(list(:,1))
 end
 
 %% Save images
-saveas(gcf,'contour.png')
-saveas(gcf,'contour.fig')
+% saveas(gcf,'contour.png')
+% saveas(gcf,'contour.fig')

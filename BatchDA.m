@@ -1,5 +1,5 @@
 function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
-    test_time] = BatchDA( ResultData, fig, alg, cell_ID )
+    test_time] = BatchDA( ResultData, fig, alg, cell_ID, charging_algorithm )
 %Automated Data Analysis Goes Through CSV files and gives an experimental
 %dashboard
 %   Reads in csv data file and plots and exports resulting plots and stats.
@@ -103,6 +103,9 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
             hold on
             xlabel('Voltage (Volts)')
             ylabel('dQ/dV (Ah/V)')
+            % save as mat after each plot
+            cd(charging_algorithm)
+            save(strcat(charging_algorithm + "_" + cell_ID + "_xVoltage2_IDC"))
             
             %% Plot Voltage Curve
             figure(cell_ID1)
@@ -114,6 +117,8 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
             ylabel('Cell Voltage (V)')
             xlim([0 1.2])
             ylim([3.1 3.65])
+            save(strcat(charging_algorithm + "_" + cell_ID + "_ChargeCap_CellVolt"))
+            
             subplot(2,4,7)
             plot(Charge_cap(i2a:i2b),temp(i2a:i2b),'Color',...
                 color_array{fix(j/100)+1},'LineWidth',1.5);
@@ -121,6 +126,8 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
             xlabel('Charge Capacity (Ah)')
             ylabel('Cell Temperature (Celsius)')
             ylim([28 45])
+            save(strcat(charging_algorithm + "_" + cell_ID + "_ChargeCap_CellTemp"))
+            
             %% Plot Current Profile 
             figure(cell_ID1)
             subplot(2,4,5)
@@ -134,15 +141,16 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
             plot(cycle_time(i2a:i2b)./60,Charge_cap(i2a:i2b),'-',...
                 'Color', color_array{fix(j/100)+1},'LineWidth',1.5);
             ylabel('Charge Capacity (Ah)')
+            save(strcat(charging_algorithm + "_" + cell_ID + "_Time_Current_ChargeCap"))
             
         end
         %% Add Cycle Legend
         C_in(j) = max(Charge_cap);
         C_out(j) = max(Discharge_cap);
-        tmax(j)= max(temp);
-        tmin(j)=min(temp);
-        t_avg(j)=mean(temp);
-        IR_CC1(j)=Internal_Resistance(i1b);
+        tmax(j) = max(temp);
+        tmin(j) = min(temp);
+        t_avg(j) = mean(temp);
+        IR_CC1(j) = Internal_Resistance(i1b);
         %% Smooth perform dQdV and add to Discharge PCA
         [dDQdV_j, xVoltage2]=IDCA(Discharge_cap(i3a:i3b),Voltage(i3a:i3b));
         dDQdV=vertcat(dDQdV,dDQdV_j);
@@ -185,6 +193,7 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
     legend('Discharge', 'Charge')
     xlabel('Cycle Index')
     ylabel(' Remaining Capacity')
+    save(strcat(charging_algorithm + "_" + cell_ID + "_CycleIdx_RemainCap"))
     %% Plot IR during CC1 and CC2
     subplot(2,4,4)
     plot(1:j,IR_CC1,'LineWidth',1.5)
@@ -192,6 +201,8 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
     xlabel('Cycle Index')
     ylabel('Internal Resistance (Ohms)')
     ylim([.015 .02])
+    save(strcat(charging_algorithm + "_" + cell_ID + "_CycleIdx_IntrnlResist"))
+    
     %% Plot Temperature as a function of Cycle Index
     subplot(2,4,3)
     plot(1:j, tmax, 'Color', [0.800000 0.250000 0.330000],'LineWidth',1.5)
@@ -204,6 +215,8 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
     ylim([28 45])
     title(cell_ID)
     CE=(100-100.*((C_in-C_out)./C_in));
+    save(strcat(charging_algorithm + "_" + cell_ID + "_CycleIdx_Temp"))
+    
     %% Plot Charge Time 
     subplot(2,4,2)
     plot(1:j,smooth(tt_80./60),'LineWidth',1.5)
@@ -218,5 +231,6 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
     cycle=j;
     test_time=max(Date_time);
     test_time=datenum([1970 1 1 0 0 test_time]);
+    save(strcat(charging_algorithm + "_" + cell_ID + "_CycleIdx_Timeto80"))
 end
 

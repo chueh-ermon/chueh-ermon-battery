@@ -130,7 +130,7 @@ for j= 1:numel(CA_array)
             ResultData = csvread(strcat(thisdir,'\',test_files{i}),1,1);
             [Charge_time,dDQdV,End_of_life, cycle, ~, DQ, cell_ID1, ...
                 test_time]=BatchDA(ResultData, j, CA_array{j}, ...
-                barcodes{i});
+                barcodes{i}, charging_algorithm);
             num_batt=num_batt+1;
             
             cap_array=[cap_array,DQ];

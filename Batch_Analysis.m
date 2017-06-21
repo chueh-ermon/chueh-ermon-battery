@@ -17,6 +17,7 @@ if ispc
     cd 'C://Data'
 else
     cd '/Users/ziyang/Desktop/2017_Chueh_Ermon_Research/test_data'
+end
 % TODO: delete between above comment and this comment
 
 % TODO: uncomment next line
@@ -133,11 +134,11 @@ for j= 1:numel(CA_array)
             % Update on progress 
             tic
             disp(['Starting processing of file ' num2str(i) ' of ' ...
-            num2str(numel(test_files)) ':  ' filename])
+                num2str(numel(test_files)) ':  ' filename])
             %% Run CSV Analysis 
             ResultData = csvread(strcat(thisdir,'\',test_files{i}),1,1);
             [Charge_time,dDQdV,End_of_life, cycle, ~, DQ, cell_ID1, ...
-                test_time]=CellAnalysis(ResultData, j, CA_array{j}, ...
+                test_time]=Cell_Analysis(ResultData, j, CA_array{j}, ...
                 barcodes{i}, charging_algorithm);
             num_batt=num_batt+1;
             

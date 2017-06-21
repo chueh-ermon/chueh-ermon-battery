@@ -141,6 +141,7 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
             plot(cycle_time(i2a:i2b)./60,Charge_cap(i2a:i2b),'-',...
                 'Color', color_array{fix(j/100)+1},'LineWidth',1.5);
             ylabel('Charge Capacity (Ah)')
+            ylim([0,60])
             save(strcat(charging_algorithm + "_" + cell_ID + "_Time_Current_ChargeCap"))
             
         end

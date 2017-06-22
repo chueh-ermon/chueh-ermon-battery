@@ -102,6 +102,9 @@ messageBody = 'Hot off the press: Check out the latest results!';
 %    messageBody,char(pdf_name));
 
 disp(slidesFile)
-%% move siles to PPT folder
-movefile slidesFile 'PowerPoint_Presentations'
-movefile pdf_name 'PowerPoint_Presentations'
+%% move siles to PPT folder - for now this doesn't work
+% cd 'PowerPoint_Presentations'
+% movefile fullfile('C:\Data\', slidesFile)
+% movefile fullfile('C:\Data\', pdf_name)
+% movefile which(slidesFile) 'C:\Data\PowerPoint_Presentations'
+% movefile which(pdf_name) 'C:\Data\PowerPoint_Presentations'

@@ -178,6 +178,7 @@ close all
 % Plot the summary figures 
 [deg_rates]=plot_spread(master_cycle,cap_array,charge_time,time_evol, ...
     master_capacity, CA_array, cyc_array, master_test_time);
+cd 'Summary_Graphs'
 figure(51)
 savefig(strcat(Date,'_',fast_charge,'_current_spread'))
 print(strcat(Date,'_',fast_charge,'_current_spread'),'-dpng')
@@ -187,5 +188,6 @@ print(strcat(Date,'_',fast_charge,'_time_vs_capacity'),'-dpng')
 figure(50)
 savefig(strcat(Date,'_',fast_charge,'_degradation_rate'))
 print(strcat(Date,'_',fast_charge,'_degradation_rate'),'-dpng')
+cd 'C://Data'
 end
 

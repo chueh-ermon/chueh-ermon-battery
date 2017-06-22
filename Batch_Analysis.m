@@ -68,7 +68,7 @@ for i = 1:numel(filenames)
     end
 end
 filenames = filenames(1:numel(filenames)-deletedcount);
-foldername = cell(1,numel(filenames));
+foldername = cell(1,numel(filenames)); % TODO: can we delete this
 % In case there were no files found.
 if numel(filenames) == 0
     disp('No files match query')
@@ -77,16 +77,19 @@ end
 for i=1:numel(filenames)
     % Finds if .csv is a metadata
     meta=strfind(filenames{i},'Meta');
-    if isempty(meta) == 0
+    if isempty(meta) == 0 % TODO: can we make this more clear?
         % If so then read the cell barcode from the metadata
+        % TODO: remove this section until next TODO comment
         if ispc
             [~, text_data] = xlsread(filenames{i});
         else
-            fprintf('ERROR: MacOS and Linux cannot run xlsread on a csv');
+            disp('ERROR: MacOS and Linux cannot run xlsread on a csv');
             %file_id = fopen(filenames{i})
             %text_data = textscan(file_id, 
             %fclose(file_id)
         end
+        % TODO: uncomment this next line
+        % [~, text_data] = xlsread(filenames{i});
         cell_ID=string(text_data{2,10});
         % Here would be where to remove other Metadata info 
         barcodes=[barcodes,cell_ID];
@@ -137,7 +140,7 @@ for j= 1:numel(CA_array)
                 num2str(numel(test_files)) ':  ' filename])
             %% Run CSV Analysis 
             ResultData = csvread(strcat(thisdir,'\',test_files{i}),1,1);
-            cd 'chueh-ermon-battery'
+            % cd 'chueh-ermon-battery'
             [Charge_time,dDQdV,End_of_life, cycle, ~, DQ, cell_ID1, ...
                 test_time]=Cell_Analysis(ResultData, j, CA_array{j}, ...
                 barcodes{i}, charging_algorithm);
@@ -188,6 +191,5 @@ print(strcat(Date,'_',fast_charge,'_time_vs_capacity'),'-dpng')
 figure(50)
 savefig(strcat(Date,'_',fast_charge,'_degradation_rate'))
 print(strcat(Date,'_',fast_charge,'_degradation_rate'),'-dpng')
-cd 'C://Data'
+cd thisdir
 end
-

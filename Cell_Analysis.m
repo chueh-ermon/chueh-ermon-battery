@@ -8,7 +8,7 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
 %   What else...
 
 % TODO: remove next line later
-fprintf("in Cell_Analysis")
+disp('In Cell_Analysis')
 
     % Total Test time
     Total_time=ResultData(:,1); 
@@ -109,8 +109,8 @@ fprintf("in Cell_Analysis")
             xlabel('Voltage (Volts)')
             ylabel('dQ/dV (Ah/V)')
             % save as mat after each plot
-            
-            cd ..
+            thisdir = cd
+            cd thisdir
             cd(charging_algorithm)
             savefig(strcat(charging_algorithm, '_', cell_ID, '_dQdV'))
             
@@ -192,6 +192,7 @@ fprintf("in Cell_Analysis")
         DQ=C_out./median(C_in(maxValueIndices));
         End_of_life=C_out(j)./median(C_in(maxValueIndices));
     end
+    
     %% Plot Capacity Curve
     subplot(2,4,1)
     plot(1:j, DQ, 'Color','r','LineWidth',1.5)
@@ -202,6 +203,7 @@ fprintf("in Cell_Analysis")
     xlabel('Cycle Index')
     ylabel(' Remaining Capacity')
     savefig(strcat(charging_algorithm , '_' , cell_ID , '_QvsN'))
+    
     %% Plot IR during CC1 and CC2
     subplot(2,4,4)
     plot(1:j,IR_CC1,'LineWidth',1.5)
@@ -240,6 +242,5 @@ fprintf("in Cell_Analysis")
     test_time=max(Date_time);
     test_time=datenum([1970 1 1 0 0 test_time]);
     savefig(strcat(charging_algorithm , "_" , cell_ID , "_ChargeTime"))
-    cd ..
+    cd thisdir
 end
-

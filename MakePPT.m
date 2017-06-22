@@ -6,7 +6,7 @@ import mlreportgen.ppt.*
 %Set Date of cycling start
 batchdate='2017-05-12';
 %Choose the charging family contains all points. 
-charging_family='7C';
+charging_family='C';
 %% Run Batch Analysis for all cells, and create Presentation and slides.
 [filenames, cap_array, CA_array, charge_time, master_capacity,barcodes, ...
     master_cycle, deg_rates]...

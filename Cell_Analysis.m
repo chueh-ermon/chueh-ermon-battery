@@ -7,8 +7,6 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
 %   Starts with CE, then Runs dQdV
 %   What else...
 
-% TODO: remove next line later
-disp('In Cell_Analysis')
 cd 'C://Data'
 
     % Total Test time

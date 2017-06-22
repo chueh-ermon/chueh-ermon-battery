@@ -6,7 +6,7 @@ import mlreportgen.ppt.*
 %Set Date of cycling start
 batchdate='2017-05-12';
 %Choose the charging family contains all points. 
-charging_family='C';
+charging_family='7C';
 %% Run Batch Analysis for all cells, and create Presentation and slides.
 [filenames, cap_array, CA_array, charge_time, master_capacity,barcodes, ...
     master_cycle, deg_rates]...
@@ -101,6 +101,7 @@ messageBody = 'Hot off the press: Check out the latest results!';
 %sendemail('mchen18','BMS project: Updated results', ...
 %    messageBody,char(pdf_name));
 
+disp(slidesFile)
 %% move siles to PPT folder
-movefile(slidesFile, 'PowerPoint_Presentations')
-movefile(pdf_name, 'PowerPoint_Presentations')
+movefile slidesFile 'PowerPoint_Presentations'
+movefile pdf_name 'PowerPoint_Presentations'

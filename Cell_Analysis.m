@@ -9,6 +9,7 @@ function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
 
 % TODO: remove next line later
 disp('In Cell_Analysis')
+cd 'C://Data'
 
     % Total Test time
     Total_time=ResultData(:,1); 
@@ -62,6 +63,8 @@ disp('In Cell_Analysis')
     alg=t2;
     % Set Figure
     cell_ID1=figure('units','normalized','outerposition',[0 0 1 1]);
+    thisdir = cd;
+    cd(charging_algorithm)
     %% Go Through Every Cycle except current running one
     for j=1:max(Cycle_Index)-1
         i1 = find(Cycle_Index == j);
@@ -109,9 +112,6 @@ disp('In Cell_Analysis')
             xlabel('Voltage (Volts)')
             ylabel('dQ/dV (Ah/V)')
             % save as mat after each plot
-            thisdir = cd
-            cd thisdir
-            cd(charging_algorithm)
             savefig(strcat(charging_algorithm, '_', cell_ID, '_dQdV'))
             
             %% Plot Voltage Curve
@@ -148,7 +148,7 @@ disp('In Cell_Analysis')
             plot(cycle_time(i2a:i2b)./60,Charge_cap(i2a:i2b),'-',...
                 'Color', color_array{fix(j/100)+1},'LineWidth',1.5);
             ylabel('Charge Capacity (Ah)')
-            ylim([0,60])
+            xlim([0,60])
             savefig(strcat(charging_algorithm , '_' , cell_ID , '_Qvst'))
             
         end
@@ -225,8 +225,10 @@ disp('In Cell_Analysis')
     ylim([28 45])
     title(cell_ID)
     CE=(100-100.*((C_in-C_out)./C_in));
-    savefig(strcat(charging_algorithm , "_" , cell_ID , "_TvsN"))
-    
+    %fig_name=strcat(charging_algorithm, "_", cell_ID, "_TvsN");
+    %savefig(subplot(2,4,3), fig_name)
+    savefig(strcat(charging_algorithm , '_' , cell_ID , '_TvsN'))
+
     %% Plot Charge Time 
     subplot(2,4,2)
     plot(1:j,smooth(tt_80./60),'LineWidth',1.5)
@@ -241,6 +243,7 @@ disp('In Cell_Analysis')
     cycle=j;
     test_time=max(Date_time);
     test_time=datenum([1970 1 1 0 0 test_time]);
-    savefig(strcat(charging_algorithm , "_" , cell_ID , "_ChargeTime"))
-    cd thisdir
+    savefig(strcat(charging_algorithm , '_' , cell_ID , '_ChargeTime'))
+
+    cd(thisdir)
 end

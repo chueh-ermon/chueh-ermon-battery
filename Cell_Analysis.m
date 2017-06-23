@@ -228,7 +228,7 @@ cd 'C://Data'
     savefig(strcat(charging_algorithm , '_' , cell_ID , '_TvsN'))
 
     %% Plot Charge Time 
-    subplot(2,4,2)
+    figChargeTime = figure
     plot(1:j,smooth(tt_80./60),'LineWidth',1.5)
     hold on 
     xlabel('Cycle Index')
@@ -242,6 +242,8 @@ cd 'C://Data'
     test_time=max(Date_time);
     test_time=datenum([1970 1 1 0 0 test_time]);
     savefig(strcat(charging_algorithm , '_' , cell_ID , '_ChargeTime'))
-
+    subplot(2,4,2)
+    plot(copyobj(figChargeTime))
+    
     cd(thisdir)
 end

@@ -20,3 +20,16 @@ octave-workspace
 
 # Simulink autosave extension
 .autosave
+
+*.csv
+*.png
+*.fig
+*.m
+*.jpg
+*.ldf
+*.mdf
+*/*
+*.pdf
+*.pptx
+*.mat
+*.dat

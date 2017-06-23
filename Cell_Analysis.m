@@ -109,7 +109,9 @@ cd 'C://Data'
             hold on
             xlabel('Voltage (Volts)')
             ylabel('dQ/dV (Ah/V)')
-            % save as fig after each plot
+            % save as mat after each plot
+            save(strcat(charging_algorithm, '_', cell_ID, ...
+                '_dQdV_cycle', j), xVoltage2, IDC)
             % savefig(strcat(charging_algorithm, '_', cell_ID, '_dQdV'))
             
             %% Plot Voltage Curve
@@ -122,6 +124,8 @@ cd 'C://Data'
             ylabel('Cell Voltage (V)')
             xlim([0 1.2])
             ylim([3.1 3.65])
+            save(strcat(charging_algorithm, '_', cell_ID, ...
+                '_VvsQ_cycle', j), Charge_cap(i2a:i2b),Voltage(i2a:i2b))
             % savefig(strcat(charging_algorithm, '_', cell_ID, '_VvsQ'))
             
             h(7) = subplot(2,4,7)
@@ -131,6 +135,8 @@ cd 'C://Data'
             xlabel('Charge Capacity (Ah)')
             ylabel('Cell Temperature (Celsius)')
             ylim([28 45])
+            save(strcat(charging_algorithm , '_' , cell_ID , ...
+                '_TvsQ_cycle', j), Charge_cap(i2a:i2b),temp(i2a:i2b))
             % savefig(strcat(charging_algorithm , '_' , cell_ID , '_TvsQ'))
             
             %% Plot Current Profile 
@@ -147,6 +153,9 @@ cd 'C://Data'
                 'Color', color_array{fix(j/100)+1},'LineWidth',1.5);
             ylabel('Charge Capacity (Ah)')
             xlim([0,60])
+            save(strcat(charging_algorithm , '_' , cell_ID , ...
+                '_Qvst_cycle', j), cycle_time(i2a:i2b)./60, ...
+                Current_J(i2a:i2b)/1.1)
             % savefig(strcat(charging_algorithm , '_' , cell_ID , '_Qvst'))
             
         end
@@ -200,6 +209,7 @@ cd 'C://Data'
     legend('Discharge', 'Charge')
     xlabel('Cycle Index')
     ylabel(' Remaining Capacity')
+    save(strcat(charging_algorithm , '_' , cell_ID , '_QvsN'), 1:j, DQ, Q)
     % savefig(strcat(charging_algorithm , '_' , cell_ID , '_QvsN'))
     
     %% Plot IR during CC1 and CC2
@@ -209,6 +219,7 @@ cd 'C://Data'
     xlabel('Cycle Index')
     ylabel('Internal Resistance (Ohms)')
     ylim([.015 .02])
+    save(strcat(charging_algorithm , '_' , cell_ID , '_IR'), 1:j, IR_CC1)
     % savefig(strcat(charging_algorithm , '_' , cell_ID , '_IR'))
     
     %% Plot Temperature as a function of Cycle Index
@@ -223,9 +234,8 @@ cd 'C://Data'
     ylim([28 45])
     title(cell_ID)
     CE=(100-100.*((C_in-C_out)./C_in));
-    %fig_name=strcat(charging_algorithm, "_", cell_ID, "_TvsN");
-    %savefig(subplot(2,4,3), fig_name)
-    %savefig(strcat(charging_algorithm , '_' , cell_ID , '_TvsN'))
+    save(strcat(charging_algorithm , '_' , cell_ID , '_TvsN'), 1:j, ...
+        tmax, tmin, t_avg)
 
     %% Plot Charge Time 
     h(2) = subplot(2,4,2)
@@ -241,7 +251,10 @@ cd 'C://Data'
     cycle=j;
     test_time=max(Date_time);
     test_time=datenum([1970 1 1 0 0 test_time]);
+    save(strcat(charging_algorithm , '_' , cell_ID , '_ChargeTime'), ...
+        1:j, tt_80./60)
     
+    %{
     %% Saving all subplots to separate fig files
     figQvsN = figure;
     hax_QvsN = copyobj(h(1), figQvsN);
@@ -282,6 +295,7 @@ cd 'C://Data'
     hax_dQdV = copyobj(h(8), figdQdV);
     set(hax_dQdV, 'Position', get(0, 'DefaultAxesPosition'));
     savefig(strcat(charging_algorithm, '_', cell_ID, '_dQdV'));
+        %}
     
     cd(thisdir)
 end

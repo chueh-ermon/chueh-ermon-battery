@@ -11,7 +11,9 @@ function [filenames, cap_array, CA_array, charge_time, master_capacity, ...
 %   - Example Batch_Analysis('Date started (YYYY-MM-DD)', 'Charge
 %     condition' ex. 'C' for all of them or '5_4C' for 5.4 C step.
 close all
+
 cd 'C://Data'
+
 
 %% Initialize Summary Arrays and values
 % Holds all Discharge dQdV curves
@@ -57,7 +59,7 @@ for i = 1:numel(filenames)
     end
 end
 filenames = filenames(1:numel(filenames)-deletedcount);
-foldername = cell(1,numel(filenames));
+foldername = cell(1,numel(filenames)); % TODO: can we delete this
 % In case there were no files found.
 if numel(filenames) == 0
     disp('No files match query')
@@ -66,7 +68,7 @@ end
 for i=1:numel(filenames)
     % Finds if .csv is a metadata
     meta=strfind(filenames{i},'Meta');
-    if isempty(meta) == 0
+    if isempty(meta) == 0 % TODO: can we make this more clear?
         % If so then read the cell barcode from the metadata
         [~, text_data] = xlsread(filenames{i});
         cell_ID=string(text_data{2,10});
@@ -116,12 +118,13 @@ for j= 1:numel(CA_array)
             % Update on progress 
             tic
             disp(['Starting processing of file ' num2str(i) ' of ' ...
-            num2str(numel(test_files)) ':  ' filename])
+                num2str(numel(test_files)) ':  ' filename])
             %% Run CSV Analysis 
             ResultData = csvread(strcat(thisdir,'\',test_files{i}),1,1);
+            cd 'chueh-ermon-battery'
             [Charge_time,dDQdV,End_of_life, cycle, ~, DQ, cell_ID1, ...
-                test_time]=BatchDA(ResultData, j, CA_array{j}, ...
-                barcodes{i});
+                test_time]=Cell_Analysis(ResultData, j, CA_array{j}, ...
+                barcodes{i}, charging_algorithm);
             num_batt=num_batt+1;
             
             cap_array=[cap_array,DQ];
@@ -159,6 +162,7 @@ close all
 % Plot the summary figures 
 [deg_rates]=plot_spread(master_cycle,cap_array,charge_time,time_evol, ...
     master_capacity, CA_array, cyc_array, master_test_time);
+cd 'Summary_Graphs'
 figure(51)
 savefig(strcat(Date,'_',fast_charge,'_current_spread'))
 print(strcat(Date,'_',fast_charge,'_current_spread'),'-dpng')
@@ -168,5 +172,5 @@ print(strcat(Date,'_',fast_charge,'_time_vs_capacity'),'-dpng')
 figure(50)
 savefig(strcat(Date,'_',fast_charge,'_degradation_rate'))
 print(strcat(Date,'_',fast_charge,'_degradation_rate'),'-dpng')
+cd(thisdir)
 end
-

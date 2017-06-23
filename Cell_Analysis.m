@@ -109,7 +109,7 @@ cd 'C://Data'
             hold on
             xlabel('Voltage (Volts)')
             ylabel('dQ/dV (Ah/V)')
-            % save as mat after each plot
+            % save as fig after each plot
             savefig(strcat(charging_algorithm, '_', cell_ID, '_dQdV'))
             
             %% Plot Voltage Curve

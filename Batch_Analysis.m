@@ -12,16 +12,7 @@ function [filenames, cap_array, CA_array, charge_time, master_capacity, ...
 %     condition' ex. 'C' for all of them or '5_4C' for 5.4 C step.
 close all
 
-% chose which data folder according to OS used - temporary: test purposes
-if ispc
-    cd 'C://Data'
-else
-    cd '/Users/ziyang/Desktop/2017_Chueh_Ermon_Research/test_data'
-end
-% TODO: delete between above comment and this comment
-
-% TODO: uncomment next line
-% cd 'C://Data'
+cd 'C://Data'
 
 
 %% Initialize Summary Arrays and values
@@ -79,17 +70,7 @@ for i=1:numel(filenames)
     meta=strfind(filenames{i},'Meta');
     if isempty(meta) == 0 % TODO: can we make this more clear?
         % If so then read the cell barcode from the metadata
-        % TODO: remove this section until next TODO comment
-        if ispc
-            [~, text_data] = xlsread(filenames{i});
-        else
-            disp('ERROR: MacOS and Linux cannot run xlsread on a csv');
-            %file_id = fopen(filenames{i})
-            %text_data = textscan(file_id, 
-            %fclose(file_id)
-        end
-        % TODO: uncomment this next line
-        % [~, text_data] = xlsread(filenames{i});
+        [~, text_data] = xlsread(filenames{i});
         cell_ID=string(text_data{2,10});
         % Here would be where to remove other Metadata info 
         barcodes=[barcodes,cell_ID];

@@ -91,15 +91,15 @@ for j=1:numel(CA_array)
     end
     cd 'C://Data'
 end 
-%% Convert to PDF and Email to Big Mike.
+%% Convert to PDF and email to the list
 close(slides);
 pptview(slidesFile,'converttopdf');
 pdf_name=string(slidesFile);
 pdf_name=erase(pdf_name,'.pptx');
 pdf_name=strcat(pdf_name,'.pdf');
 messageBody = 'Hot off the press: Check out the latest results!';
-%sendemail('mchen18','BMS project: Updated results', ...
-%    messageBody,char(pdf_name));
+sendemail('mchen18','BMS project: Updated results', ...
+    messageBody,char(pdf_name));
 
 disp(slidesFile)
 

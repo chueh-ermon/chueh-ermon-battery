@@ -51,8 +51,7 @@ cd 'C://Data'
         [0,0,102]./256; [0,0,77]./256; [0,0,51]./256; [0,0,26]./256; ...
         [0,0,0]};
     % Cycle legends2
-    legend_array={'100'; '200'; '300'; '400'; '500';'600';'700';'800'; ...
-        '900';'1000'};
+    legend_array={'100'; '200'; '300'; '400'; '500';'600';'700';'800'; '900';'1000'};
     % Translate charging algorithm to something we can put in a legend.
     t = alg;
     t2 = strrep(t, '_' , '.' );
@@ -192,8 +191,11 @@ cd 'C://Data'
     %% Plot Summary Statistics
      figure(cell_ID1)
         subplot(2,4,8)
-        legend(legend_array{1:(fix(j/100))},'Location','eastoutside', ...
-            'Orientation','vertical')
+        if fix(j/100) ~= 0
+            legend(legend_array{1:(fix(j/100))},'Location', ...
+                'eastoutside', 'Orientation','vertical')
+        end
+        
     % Export Charge Capacity and correct if errant charge
     if j>5
         [sorted_C, ind]=sort(C_in,'descend');

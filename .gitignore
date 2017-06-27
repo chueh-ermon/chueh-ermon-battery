@@ -24,7 +24,6 @@ octave-workspace
 *.csv
 *.png
 *.fig
-*.m
 *.jpg
 *.ldf
 *.mdf

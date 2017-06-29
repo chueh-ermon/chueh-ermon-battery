@@ -6,6 +6,7 @@
 
 %% Allow user to select csv files for analysis
 cd 'C://Data'
+
 [filename, pathname] = uigetfile({'*.CSV'}, ...
     'Select the CSV files','MultiSelect', 'on');
 
@@ -22,6 +23,8 @@ cd 'C://Data'
 %           | temperature
 %            ----
 
+% alg - policy/file name
+
 %% For each file, collect data needed
 % If just one file
 if isa(filename,'char')
@@ -31,7 +34,7 @@ elseif isa(filename,'cell') % If multiple files
     num_csvs = length(filename); % Number of CSVs selected
     for j=1:num_csvs  
         raw_data = csvread(strcat(pathname,filename{j}),1,1);
-        [cell] = full_cell_analysis(raw_data);
+        [cell] = full_cell_analysis(raw_data, alg);
         cells(j) = cell;
         % Run file through full_cell_analysis
         % find cell barcode in metadata file - add to cell

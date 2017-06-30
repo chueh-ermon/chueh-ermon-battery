@@ -72,7 +72,7 @@ cd 'C://Data'
     thisdir = cd;
     cd(charging_algorithm)
     %% Go Through Every Cycle except current running one
-    for j=1:end_cycle
+    for j=1:max(Cycle_Index)-1
         cycle_indices = find(Cycle_Index == j);
         cycle_start = cycle_indices(1); cycle_end = cycle_indices(end);
         % Time in the cycle
@@ -238,8 +238,8 @@ cd 'C://Data'
         maxValues = sorted_C(1:5);
         maxValueIndices = ind(1:5);
         median(C_in(maxValueIndices));
-        %CQ = C_in./median(C_in(maxValueIndices));
-        %DQ = C_out./median(C_in(maxValueIndices));
+        CQ = C_in; %./median(C_in(maxValueIndices));
+        DQ = C_out; %./median(C_in(maxValueIndices));
         End_of_life=C_out(j)./median(C_in(maxValueIndices));
     end
     
@@ -254,7 +254,7 @@ cd 'C://Data'
     xlabel('Cycle Index')
     ylabel(' Remaining Capacity')
     save(strcat(charging_algorithm , '_' , cell_ID , '_QvsN'), ...
-        'num_cycles', 'DQ', 'Q')
+        'num_cycles', 'DQ', 'CQ')
     % savefig(strcat(charging_algorithm , '_' , cell_ID , '_QvsN'))
     
     % ADDED

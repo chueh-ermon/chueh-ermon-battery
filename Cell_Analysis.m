@@ -1,4 +1,4 @@
-function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
+function [Charge_time, dDQdV, End_of_life, cycle, CQ, DQ, cell_ID1, ...
     test_time, battery] = Cell_Analysis( ResultData, fig, alg, cell_ID, ...
     charging_algorithm )
 %Automated Data Analysis Goes Through CSV files and gives an experimental
@@ -238,16 +238,16 @@ cd 'C://Data'
         maxValues = sorted_C(1:5);
         maxValueIndices = ind(1:5);
         median(C_in(maxValueIndices));
-        Q=C_in./median(C_in(maxValueIndices));
-        DQ=C_out./median(C_in(maxValueIndices));
+        %CQ = C_in./median(C_in(maxValueIndices));
+        %DQ = C_out./median(C_in(maxValueIndices));
         End_of_life=C_out(j)./median(C_in(maxValueIndices));
     end
     
     %% Plot Capacity Curve
     subplot(2,4,1)
-    plot(1:j, DQ, 'Color','r','LineWidth',1.5)
+    plot(1:j, C_out, 'Color','r','LineWidth',1.5)%change to raw data
     hold on
-    plot(1:j, Q, 'Color', 'b','LineWidth',1.5)
+    plot(1:j, C_in, 'Color', 'b','LineWidth',1.5)
     hold on
     num_cycles = 1:j;
     legend('Discharge', 'Charge')
@@ -260,7 +260,7 @@ cd 'C://Data'
     % ADDED
     battery.summary.cycle = num_cycles;
     battery.summary.QDischarge = DQ;
-    battery.summary.QCharge = Q;
+    battery.summary.QCharge = CQ;
     % ADDED
     
     %% Plot IR during CC1 and CC2
@@ -312,7 +312,7 @@ cd 'C://Data'
     test_time=datenum([1970 1 1 0 0 test_time]);
     save(strcat(charging_algorithm , '_' , cell_ID , '_ChargeTime'), ...
         'num_cycles', 'Charge_time')
-    battery.summary.chargetime = smooth(tt_80./60); % ADDED
+    battery.summary.chargetime = (tt_80./60)'; % ADDED
     
     cd(thisdir)
 end

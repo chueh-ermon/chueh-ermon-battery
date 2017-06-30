@@ -1,5 +1,5 @@
 function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
-    test_time] = Cell_Analysis( ResultData, fig, alg, cell_ID, ...
+    test_time, cell] = Cell_Analysis( ResultData, fig, alg, cell_ID, ...
     charging_algorithm )
 %Automated Data Analysis Goes Through CSV files and gives an experimental
 %dashboard
@@ -19,6 +19,7 @@ cd 'C://Data'
     Step_Index=round(ResultData(:,4));
     % Cycle index, 0 is formation cycle
     Cycle_Index=ResultData(:,5);
+    end_cycle = ResultData(end,5);
     % All Voltage, current, charge capacity, internal resistance,
     % and temperature variables
     VoltageV=ResultData(:,7);
@@ -60,37 +61,60 @@ cd 'C://Data'
     t2 = strrep(t2, '-' , '(' );
     t2 = strrep(t2, 'per.' , '%)-' );
     alg=t2;
+    cell.policy = t2; % ADDED
     % Set Figure
     cell_ID1=figure('units','normalized','outerposition',[0 0 1 1]);
     thisdir = cd;
     cd(charging_algorithm)
     %% Go Through Every Cycle except current running one
-    for j=1:max(Cycle_Index)-1
-        i1 = find(Cycle_Index == j);
-        i1a = i1(1); i1b = i1(end);
+    for j=1:end_cycle
+        cycle_indices = find(Cycle_Index == j);
+        cycle_start = cycle_indices(1); cycle_end = cycle_indices(end);
         % Time in the cycle
-        cycle_time=Total_time(i1a:i1b)-Total_time(i1a);
+        cycle_time=Total_time(cycle_start:cycle_end)-Total_time(cycle_start);
         % Voltage of Cycle J
-        Voltage=VoltageV(i1a:i1b);
+        Voltage=VoltageV(cycle_start:cycle_end);
         % Current values for cycle J
-        Current_J=Current(i1a:i1b);
+        Current_J=Current(cycle_start:cycle_end);
         % Charge Capacity for the cycle 
-        Charge_cap=Charge_CapacityAh(i1a:i1b);
+        Charge_cap=Charge_CapacityAh(cycle_start:cycle_end);
         %Discharge Capacity for the cycle 
-        Discharge_cap=Discharge_CapacityAh(i1a:i1b);
+        Discharge_cap=Discharge_CapacityAh(cycle_start:cycle_end);
         % Temperature of the cycle. 
-        temp=TemperatureT1(i1a:i1b);
+        temp=TemperatureT1(cycle_start:cycle_end);
         % Index of any charging portion
-        i2 = find(Current(i1a:i1b) >= 0); % todo: > or >= ?
-        i2a = i2(1); i2b = i2(end);
+        charge_indices = find(Current(cycle_start:cycle_end) >= 0); % todo: > or >= ?
+        charge_start = charge_indices(1); charge_end = charge_indices(end);
         % Index of discharging portion of the cycle 
-        i3 = find(Current(i1a:i1b) < 0);
+        discharge_indices = find(Current(cycle_start:cycle_end) < 0);
         % In case i3 is empty
-        if isempty(i3)
-            i3a=1; i3b=2;
+        if isempty(discharge_indices)
+            discharge_start = 1; discharge_end = 2;
         else 
-            i3a = i3(1); i3b = i3(end);
+            discharge_start = discharge_indices(1); discharge_end = discharge_indices(end);
         end
+        
+        % ADDED
+        % record discharge dQdV vs V, plots if multiple of 100
+        [IDC,xVoltage2]=IDCA(Discharge_cap(discharge_start: ...
+            discharge_end),Voltage(discharge_start:discharge_end));
+        cell.cycles(j).discharge_dQdVvsV.V = xVoltage2;
+        cell.cycles(j).discharge_dQdVvsV.dQdV = IDC;
+        if mod(j,100) == 0
+            figure(cell_ID1)
+            subplot(2,4,8)
+            [IDC,xVoltage2]=IDCA(Discharge_cap(discharge_start:discharge_end),Voltage(discharge_start:discharge_end));
+            plot(xVoltage2,IDC,'Color',color_array{fix(j/100)+1}, ...
+                'LineWidth',1.5);
+            hold on
+            xlabel('Voltage (Volts)')
+            ylabel('dQ/dV (Ah/V)')
+            % save as mat after each plot
+            save(strcat(charging_algorithm, '_', cell_ID, ...
+                '_dQdV_cycle', num2str(j)), 'xVoltage2', 'IDC')
+        end
+        % ADDED
+        
         %% Plot every 100 cycles
         if mod(j,100) == 0
             %% Plot ICA for Charge
@@ -102,9 +126,12 @@ cd 'C://Data'
 %             xlabel('Voltage (Volts)')
 %             ylabel('dQ/dV (Ah/V)')
             %% Plot ICA for Discharge
+            
+            % ADDED
+            %{
             figure(cell_ID1)
             subplot(2,4,8)
-            [IDC,xVoltage2]=IDCA(Discharge_cap(i3a:i3b),Voltage(i3a:i3b));
+            [IDC,xVoltage2]=IDCA(Discharge_cap(discharge_start:discharge_end),Voltage(discharge_start:discharge_end));
             plot(xVoltage2,IDC,'Color',color_array{fix(j/100)+1}, ...
                 'LineWidth',1.5);
             hold on
@@ -114,14 +141,16 @@ cd 'C://Data'
             save(strcat(charging_algorithm, '_', cell_ID, ...
                 '_dQdV_cycle', num2str(j)), 'xVoltage2', 'IDC')
             % savefig(strcat(charging_algorithm, '_', cell_ID, '_dQdV'))
+            %}
+            % ADDED
             
             %% Plot Voltage Curve
             figure(cell_ID1)
             subplot(2,4,6)
-            plot(Charge_cap(i2a:i2b),Voltage(i2a:i2b),'Color',...
+            plot(Charge_cap(charge_start:charge_end),Voltage(charge_start:charge_end),'Color',...
                 color_array{fix(j/100)+1},'LineWidth',1.5);
-            charge_capacity = Charge_cap(i2a:i2b);
-            volt = Voltage(i2a:i2b);
+            charge_capacity = Charge_cap(charge_start:charge_end);
+            volt = Voltage(charge_start:charge_end);
             hold on
             xlabel('Charge Capacity (Ah)')
             ylabel('Cell Voltage (V)')
@@ -132,10 +161,10 @@ cd 'C://Data'
             % savefig(strcat(charging_algorithm, '_', cell_ID, '_VvsQ'))
             
             subplot(2,4,7)
-            plot(Charge_cap(i2a:i2b),temp(i2a:i2b),'Color',...
+            plot(Charge_cap(charge_start:charge_end),temp(charge_start:charge_end),'Color',...
                 color_array{fix(j/100)+1},'LineWidth',1.5);
-            chrg_cap = Charge_cap(i2a:i2b);
-            temperature = temp(i2a:i2b);
+            chrg_cap = Charge_cap(charge_start:charge_end);
+            temperature = temp(charge_start:charge_end);
             hold on 
             xlabel('Charge Capacity (Ah)')
             ylabel('Cell Temperature (Celsius)')
@@ -148,15 +177,15 @@ cd 'C://Data'
             figure(cell_ID1)
             subplot(2,4,5)
             yyaxis left
-            plot(cycle_time(i2a:i2b)./60,Current_J(i2a:i2b)/1.1,'-',...
+            plot(cycle_time(charge_start:charge_end)./60,Current_J(charge_start:charge_end)/1.1,'-',...
                 'Color', color_array_blue{fix(j/100)+1},'LineWidth',1.5);
-            cycle_t = cycle_time(i2a:i2b)./60;
-            current = Current_J(i2a:i2b)/1.1;
+            cycle_t = cycle_time(charge_start:charge_end)./60;
+            current = Current_J(charge_start:charge_end)/1.1;
             xlabel('Time (minutes)')
             ylabel('Current (C-Rate)')
             hold on
             yyaxis right
-            plot(cycle_time(i2a:i2b)./60,Charge_cap(i2a:i2b),'-',...
+            plot(cycle_time(charge_start:charge_end)./60,Charge_cap(charge_start:charge_end),'-',...
                 'Color', color_array{fix(j/100)+1},'LineWidth',1.5);
             ylabel('Charge Capacity (Ah)')
             xlim([0,60])
@@ -171,18 +200,18 @@ cd 'C://Data'
         tmax(j) = max(temp);
         tmin(j) = min(temp);
         t_avg(j) = mean(temp);
-        IR_CC1(j) = Internal_Resistance(i1b);
+        IR_CC1(j) = Internal_Resistance(cycle_end);
         %% Smooth perform dQdV and add to Discharge PCA
-        [dDQdV_j, xVoltage2]=IDCA(Discharge_cap(i3a:i3b),Voltage(i3a:i3b));
+        [dDQdV_j, xVoltage2]=IDCA(Discharge_cap(discharge_start:discharge_end),Voltage(discharge_start:discharge_end));
         dDQdV=vertcat(dDQdV,dDQdV_j);
         %% Find Time to 80%
-        i3 = find(Charge_CapacityAh(i1a:i1b) >= .88,2);
-        if isempty(i3) || length(i3) == 1 
+        discharge_indices = find(Charge_CapacityAh(cycle_start:cycle_end) >= .88,2);
+        if isempty(discharge_indices) || length(discharge_indices) == 1 
             tt_80(j)=1200;
         else
-            tt_80(j)=Total_time(i3(2)+i1a)-Total_time(i1a);
-            Total_time(i3+i1a);
-            Total_time(i1a);
+            tt_80(j)=Total_time(discharge_indices(2)+cycle_start)-Total_time(cycle_start);
+            Total_time(discharge_indices+cycle_start);
+            Total_time(cycle_start);
         end
         % In case an incomplete charge
         if tt_80(j)<300
@@ -215,13 +244,19 @@ cd 'C://Data'
     hold on
     plot(1:j, Q, 'Color', 'b','LineWidth',1.5)
     hold on
-    num_cycles = 1:j
+    num_cycles = 1:j;
     legend('Discharge', 'Charge')
     xlabel('Cycle Index')
     ylabel(' Remaining Capacity')
     save(strcat(charging_algorithm , '_' , cell_ID , '_QvsN'), ...
         'num_cycles', 'DQ', 'Q')
     % savefig(strcat(charging_algorithm , '_' , cell_ID , '_QvsN'))
+    
+    % ADDED
+    cell.summary.cycle = num_cycles;
+    cell.summary.QDischarge = DQ;
+    cell.summary.QCharge = Q;
+    % ADDED
     
     %% Plot IR during CC1 and CC2
     subplot(2,4,4)
@@ -232,7 +267,8 @@ cd 'C://Data'
     ylim([.015 .02])
     save(strcat(charging_algorithm , '_' , cell_ID , '_IR'), ...
         'num_cycles', 'IR_CC1')
-    % savefig(strcat(charging_algorithm , '_' , cell_ID , '_IR'))
+    
+    cell.summary.IR = IR_CC1; % ADDED
     
     %% Plot Temperature as a function of Cycle Index
     subplot(2,4,3)
@@ -248,6 +284,12 @@ cd 'C://Data'
     CE=(100-100.*((C_in-C_out)./C_in));
     save(strcat(charging_algorithm , '_' , cell_ID , '_TvsN'), ...
         'num_cycles', 'tmax', 'tmin', 't_avg')
+    
+    % ADDED
+    cell.summary.tmax = tmax;
+    cell.summary.tavg = t_avg;
+    cell.summary.tmin = tmin;
+    % ADDED
 
     %% Plot Charge Time 
     subplot(2,4,2)
@@ -257,7 +299,7 @@ cd 'C://Data'
     ylabel('Time to 80% SOC (minutes)')
     title(alg)
     ylim([8.5 14])
-    %Output Charging time in Minutes
+    % Output Charging time in Minutes
     Charge_time=tt_80./60;
     % Output final capacity and cycle count
     cycle=j;
@@ -265,49 +307,7 @@ cd 'C://Data'
     test_time=datenum([1970 1 1 0 0 test_time]);
     save(strcat(charging_algorithm , '_' , cell_ID , '_ChargeTime'), ...
         'num_cycles', 'Charge_time')
-    
-    %{
-    %% Saving all subplots to separate fig files
-    figQvsN = figure;
-    hax_QvsN = copyobj(h(1), figQvsN);
-    set(hax_QvsN, 'Position', get(0, 'DefaultAxesPosition'));
-    savefig(strcat(charging_algorithm , '_' , cell_ID , '_QvsN'))
-    
-    figChargeTime = figure;
-    hax_ChargeTime = copyobj(h(2), figChargeTime);
-    set(hax_ChargeTime, 'Position', get(0, 'DefaultAxesPosition'));
-    savefig(strcat(charging_algorithm , '_' , cell_ID , '_ChargeTime'));
-    
-    figTvsN = figure;
-    hax_TvsN = copyobj(h(3), figTvsN);
-    set(hax_TvsN, 'Position', get(0, 'DefaultAxesPosition'));
-    savefig(strcat(charging_algorithm , '_' , cell_ID , '_TvsN'));
-    
-    figIR = figure;
-    hax_IR = copyobj(h(4), figIR);
-    set(hax_IR, 'Position', get(0, 'DefaultAxesPosition'));
-    savefig(strcat(charging_algorithm , '_' , cell_ID , '_IR'));
-    
-    %figQvst = figure;
-    %hax_Qvst = copyobj(h(5), figQvst);
-    %set(hax_Qvst, 'Position', get(0, 'DefaultAxesPosition'));
-    %savefig(strcat(charging_algorithm , '_' , cell_ID , '_Qvst'))
-    
-    figVvsQ = figure;
-    hax_VvsQ = copyobj(h(6), figVvsQ);
-    set(hax_VvsQ, 'Position', get(0, 'DefaultAxesPosition'));
-    savefig(strcat(charging_algorithm, '_', cell_ID, '_VvsQ'));
-    
-    figTvsQ = figure;
-    hax_TvsQ = copyobj(h(7), figTvsQ);
-    set(hax_TvsQ, 'Position', get(0, 'DefaultAxesPosition'));
-    savefig(strcat(charging_algorithm , '_' , cell_ID , '_TvsQ'));
-    
-    figdQdV = figure;
-    hax_dQdV = copyobj(h(8), figdQdV);
-    set(hax_dQdV, 'Position', get(0, 'DefaultAxesPosition'));
-    savefig(strcat(charging_algorithm, '_', cell_ID, '_dQdV'));
-        %}
+    cell.summary.chargetime = smooth(tt_80./60); % ADDED
     
     cd(thisdir)
 end

@@ -123,8 +123,9 @@ for j= 1:numel(CA_array)
             ResultData = csvread(strcat(thisdir,'\',test_files{i}),1,1);
             cd 'chueh-ermon-battery'
             [Charge_time,dDQdV,End_of_life, cycle, ~, DQ, cell_ID1, ...
-                test_time]=Cell_Analysis(ResultData, j, CA_array{j}, ...
-                barcodes{i}, charging_algorithm);
+                test_time, cell] = Cell_Analysis(ResultData, j, ...
+                CA_array{j}, barcodes{i}, charging_algorithm);
+            cells(i) = cell;
             num_batt=num_batt+1;
             
             cap_array=[cap_array,DQ];
@@ -157,6 +158,9 @@ for j= 1:numel(CA_array)
     master_capacity=[master_capacity,rem_cap];
     cyc_array=[cyc_array, cyc_count];
 end
+
+save(strcat(Date,'_batchdata'), cells);
+
 %% Plot Summary figure
 close all
 % Plot the summary figures 

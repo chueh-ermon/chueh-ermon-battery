@@ -98,8 +98,8 @@ pdf_name=string(slidesFile);
 pdf_name=erase(pdf_name,'.pptx');
 pdf_name=strcat(pdf_name,'.pdf');
 messageBody = 'Hot off the press: Check out the latest results!';
-sendemail('mchen18','BMS project: Updated results', ...
-    messageBody,char(pdf_name));
+%sendemail('mchen18','BMS project: Updated results', ...
+%    messageBody,char(pdf_name));
 
 disp(slidesFile)
 

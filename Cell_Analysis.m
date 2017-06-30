@@ -61,10 +61,10 @@ cd 'C://Data'
     t2 = strrep(t2, '-' , '(' );
     t2 = strrep(t2, 'per.' , '%)-' );
     alg=t2;
-    battery = struct('policy', t2, 'barcode', ' ', 'cycles', ...
+    battery = struct('policy', t2, 'barcode', cell_ID, 'cycles', ...
         struct('discharge_dQdVvsV', struct('V', [], 'dQdV', [])), ...
         'summary', struct('cycle', [], 'QDischarge', [], 'QCharge', ...
-        [], 'IR', [], 'tmax', [], 'tavg', [], 'tmin', [], ...
+        [], 'IR', [], 'Tmax', [], 'Tavg', [], 'Tmin', [], ...
         'chargetime', []));
     %battery.policy = t2; % ADDED
     % Set Figure
@@ -291,9 +291,9 @@ cd 'C://Data'
         'num_cycles', 'tmax', 'tmin', 't_avg')
     
     % ADDED
-    battery.summary.tmax = tmax;
-    battery.summary.tavg = t_avg;
-    battery.summary.tmin = tmin;
+    battery.summary.Tmax = tmax;
+    battery.summary.Tavg = t_avg;
+    battery.summary.Tmin = tmin;
     % ADDED
 
     %% Plot Charge Time 

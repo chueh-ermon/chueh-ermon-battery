@@ -27,7 +27,6 @@ octave-workspace
 *.jpg
 *.ldf
 *.mdf
-*/*
 *.pdf
 *.pptx
 *.mat

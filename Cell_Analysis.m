@@ -1,5 +1,5 @@
-function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, cell_ID1, ...
-    test_time, cell] = Cell_Analysis( ResultData, fig, alg, cell_ID, ...
+function [Charge_time, dDQdV, End_of_life, cycle, Q, DQ, battery_ID1, ...
+    test_time, battery] = Cell_Analysis( ResultData, fig, alg, cell_ID, ...
     charging_algorithm )
 %Automated Data Analysis Goes Through CSV files and gives an experimental
 %dashboard
@@ -61,7 +61,7 @@ cd 'C://Data'
     t2 = strrep(t2, '-' , '(' );
     t2 = strrep(t2, 'per.' , '%)-' );
     alg=t2;
-    cell.policy = t2; % ADDED
+    battery.policy = t2; % ADDED
     % Set Figure
     cell_ID1=figure('units','normalized','outerposition',[0 0 1 1]);
     thisdir = cd;
@@ -98,8 +98,8 @@ cd 'C://Data'
         % record discharge dQdV vs V, plots if multiple of 100
         [IDC,xVoltage2]=IDCA(Discharge_cap(discharge_start: ...
             discharge_end),Voltage(discharge_start:discharge_end));
-        cell.cycles(j).discharge_dQdVvsV.V = xVoltage2;
-        cell.cycles(j).discharge_dQdVvsV.dQdV = IDC;
+        battery.cycles(j).discharge_dQdVvsV.V = xVoltage2;
+        battery.cycles(j).discharge_dQdVvsV.dQdV = IDC;
         if mod(j,100) == 0
             figure(cell_ID1)
             subplot(2,4,8)
@@ -253,9 +253,9 @@ cd 'C://Data'
     % savefig(strcat(charging_algorithm , '_' , cell_ID , '_QvsN'))
     
     % ADDED
-    cell.summary.cycle = num_cycles;
-    cell.summary.QDischarge = DQ;
-    cell.summary.QCharge = Q;
+    battery.summary.cycle = num_cycles;
+    battery.summary.QDischarge = DQ;
+    battery.summary.QCharge = Q;
     % ADDED
     
     %% Plot IR during CC1 and CC2
@@ -268,7 +268,7 @@ cd 'C://Data'
     save(strcat(charging_algorithm , '_' , cell_ID , '_IR'), ...
         'num_cycles', 'IR_CC1')
     
-    cell.summary.IR = IR_CC1; % ADDED
+    battery.summary.IR = IR_CC1; % ADDED
     
     %% Plot Temperature as a function of Cycle Index
     subplot(2,4,3)
@@ -286,9 +286,9 @@ cd 'C://Data'
         'num_cycles', 'tmax', 'tmin', 't_avg')
     
     % ADDED
-    cell.summary.tmax = tmax;
-    cell.summary.tavg = t_avg;
-    cell.summary.tmin = tmin;
+    battery.summary.tmax = tmax;
+    battery.summary.tavg = t_avg;
+    battery.summary.tmin = tmin;
     % ADDED
 
     %% Plot Charge Time 
@@ -307,7 +307,7 @@ cd 'C://Data'
     test_time=datenum([1970 1 1 0 0 test_time]);
     save(strcat(charging_algorithm , '_' , cell_ID , '_ChargeTime'), ...
         'num_cycles', 'Charge_time')
-    cell.summary.chargetime = smooth(tt_80./60); % ADDED
+    battery.summary.chargetime = smooth(tt_80./60); % ADDED
     
     cd(thisdir)
 end

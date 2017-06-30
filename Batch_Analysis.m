@@ -59,7 +59,7 @@ for i = 1:numel(filenames)
     end
 end
 filenames = filenames(1:numel(filenames)-deletedcount);
-foldername = cell(1,numel(filenames)); % TODO: can we delete this
+foldername = battery(1,numel(filenames)); % TODO: can we delete this
 % In case there were no files found.
 if numel(filenames) == 0
     disp('No files match query')
@@ -123,9 +123,9 @@ for j= 1:numel(CA_array)
             ResultData = csvread(strcat(thisdir,'\',test_files{i}),1,1);
             cd 'chueh-ermon-battery'
             [Charge_time,dDQdV,End_of_life, cycle, ~, DQ, cell_ID1, ...
-                test_time, cell] = Cell_Analysis(ResultData, j, ...
+                test_time, battery] = Cell_Analysis(ResultData, j, ...
                 CA_array{j}, barcodes{i}, charging_algorithm);
-            cells(i) = cell;
+            batteries(i) = battery;
             num_batt=num_batt+1;
             
             cap_array=[cap_array,DQ];
@@ -159,7 +159,7 @@ for j= 1:numel(CA_array)
     cyc_array=[cyc_array, cyc_count];
 end
 
-save(strcat(Date,'_batchdata'), cells);
+save(strcat(Date,'_batchdata'), batteries);
 
 %% Plot Summary figure
 close all

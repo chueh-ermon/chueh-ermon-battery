@@ -1,13 +1,9 @@
 function [Charge_time, dDQdV, End_of_life, cycle, CQ, DQ, cell_ID1, ...
     test_time, battery] = Cell_Analysis( ResultData, fig, alg, cell_ID, ...
     charging_algorithm )
-%Automated Data Analysis Goes Through CSV files and gives an experimental
-%dashboard
-%   Reads in csv data file and plots and exports resulting plots and stats.
-%   Starts with CE, then Runs dQdV
-%   What else...
+%Cell Analysis creates experimental 'dashboard' for each cell 
 
-cd 'C://Data'
+    cd 'C://Data'
 
     % Total Test time
     Total_time=ResultData(:,1); 
@@ -22,7 +18,7 @@ cd 'C://Data'
     end_cycle = ResultData(end,5);
     % All Voltage, current, charge capacity, internal resistance,
     % and temperature variables
-    VoltageV=ResultData(:,7);
+    VoltageCol=ResultData(:,7);
     Current=ResultData(:,6);
     Charge_CapacityAh=ResultData(:,8);
     Discharge_CapacityAh=ResultData(:,9);
@@ -71,14 +67,14 @@ cd 'C://Data'
     cell_ID1=figure('units','normalized','outerposition',[0 0 1 1]);
     thisdir = cd;
     cd(charging_algorithm)
-    %% Go Through Every Cycle except current running one
+    %% Go through every cycle except current running one
     for j=1:max(Cycle_Index)-1
         cycle_indices = find(Cycle_Index == j);
         cycle_start = cycle_indices(1); cycle_end = cycle_indices(end);
         % Time in the cycle
         cycle_time=Total_time(cycle_start:cycle_end)-Total_time(cycle_start);
         % Voltage of Cycle J
-        Voltage=VoltageV(cycle_start:cycle_end);
+        Voltage=VoltageCol(cycle_start:cycle_end);
         % Current values for cycle J
         Current_J=Current(cycle_start:cycle_end);
         % Charge Capacity for the cycle 
@@ -172,7 +168,7 @@ cd 'C://Data'
             temperature = temp(charge_start:charge_end);
             hold on 
             xlabel('Charge Capacity (Ah)')
-            ylabel('Cell Temperature (Celsius)')
+            ylabel('Cell Temperature (°C)')
             ylim([28 45])
             save(strcat(charging_algorithm , '_' , cell_ID , ...
                 '_TvsQ_cycle', num2str(j)), 'chrg_cap','temperature')
@@ -283,7 +279,7 @@ cd 'C://Data'
     hold on 
     plot(1:j, t_avg, 'Color',[1.000000 0.620000 0.000000],'LineWidth',1.5)
     xlabel('Cycle Index')
-    ylabel('Temperature (Celsius)')
+    ylabel('Temperature (°C)')
     ylim([28 45])
     title(cell_ID)
     CE=(100-100.*((C_in-C_out)./C_in));

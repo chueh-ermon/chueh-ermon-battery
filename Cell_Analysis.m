@@ -252,7 +252,7 @@ cd 'C://Data'
     num_cycles = 1:j;
     legend('Discharge', 'Charge')
     xlabel('Cycle Index')
-    ylabel(' Remaining Capacity')
+    ylabel('Remaining Capacity (Ah)')
     save(strcat(charging_algorithm , '_' , cell_ID , '_QvsN'), ...
         'num_cycles', 'DQ', 'CQ')
     % savefig(strcat(charging_algorithm , '_' , cell_ID , '_QvsN'))

@@ -308,7 +308,7 @@ function [Charge_time, dDQdV, End_of_life, cycle, CQ, DQ, cell_ID1, ...
     test_time=datenum([1970 1 1 0 0 test_time]);
     save(strcat(charging_algorithm , '_' , cell_ID , '_ChargeTime'), ...
         'num_cycles', 'Charge_time')
-    battery.summary.chargetime = (tt_80./60)'; % ADDED
+    battery.summary.chargetime = (tt_80./60); % ADDED
     
     cd(thisdir)
 end

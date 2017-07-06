@@ -4,7 +4,7 @@ function [deg_rates ] = plot_spread(master_cycle, DQ, charge_time, ...
 now=datenum(datetime('now'));
 non_linear_regression( master_cycle, DQ)
 leg=[];
-line_color=[];
+line_color={};
 col_array={};
 deg_rates={};
 finished_test=[];

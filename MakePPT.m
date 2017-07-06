@@ -4,7 +4,7 @@
 %% Import Power point generator app
 import mlreportgen.ppt.*
 %Set Date of cycling start
-batchdate='2017-05-12';
+batchdate='2017-06-30'; % prev 2017-05-12
 %Choose the charging family contains all points. 
 charging_family='C';
 %% Run Batch Analysis for all cells, and create Presentation and slides.

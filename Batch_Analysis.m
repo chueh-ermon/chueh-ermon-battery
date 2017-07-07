@@ -160,7 +160,7 @@ for j= 1:numel(CA_array)
     cyc_array=[cyc_array, cyc_count];
 end
 
-save(strcat(Date,'_batchdata'), 'batteries');
+save(strcat(Date,'_batchdata'), 'batch_data');
 
 %% Plot Summary figure
 close all

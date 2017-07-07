@@ -74,7 +74,7 @@ function [Charge_time, dDQdV, End_of_life, cycle, CQ, DQ, cell_ID1, ...
         % Time in the cycle
         cycle_time=Total_time(cycle_start:cycle_end)-Total_time(cycle_start);
         % Voltage of Cycle J
-        Voltage=VoltageCol(cycle_start:cycle_end);
+        Voltage=VoltageCol(cycle_start:(cycle_end));% changed indexing to remove artifact
         % Current values for cycle J
         Current_J=Current(cycle_start:cycle_end);
         % Charge Capacity for the cycle 
@@ -148,10 +148,10 @@ function [Charge_time, dDQdV, End_of_life, cycle, CQ, DQ, cell_ID1, ...
             %% Plot Voltage Curve
             figure(cell_ID1)
             subplot(2,4,6)
-            plot(Charge_cap(charge_start:charge_end),Voltage(charge_start:charge_end),'Color',...
+            plot(Charge_cap(charge_start:(charge_end-1)),Voltage(charge_start:(charge_end-1)),'Color',...
                 color_array{fix(j/100)+1},'LineWidth',1.5);
-            charge_capacity = Charge_cap(charge_start:charge_end);
-            volt = Voltage(charge_start:charge_end);
+            charge_capacity = Charge_cap(charge_start:(charge_end-1));
+            volt = Voltage(charge_start:(charge_end-1));
             hold on
             xlabel('Charge Capacity (Ah)')
             ylabel('Cell Voltage (V)')
@@ -162,10 +162,10 @@ function [Charge_time, dDQdV, End_of_life, cycle, CQ, DQ, cell_ID1, ...
             % savefig(strcat(charging_algorithm, '_', cell_ID, '_VvsQ'))
             
             subplot(2,4,7)
-            plot(Charge_cap(charge_start:charge_end),temp(charge_start:charge_end),'Color',...
-                color_array{fix(j/100)+1},'LineWidth',1.5);
-            chrg_cap = Charge_cap(charge_start:charge_end);
-            temperature = temp(charge_start:charge_end);
+            plot(Charge_cap(charge_start:(charge_end-1)),temp(charge_start:(charge_end-1)),'Color',...
+                color_array{fix(j/100)+1},'LineWidth',1.5); % changed indexing 
+            chrg_cap = Charge_cap(charge_start:(charge_end-1));
+            temperature = temp(charge_start:(charge_end-1));
             hold on 
             xlabel('Charge Capacity (Ah)')
             ylabel('Cell Temperature (°C)')

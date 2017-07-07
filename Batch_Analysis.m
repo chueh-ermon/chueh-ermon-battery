@@ -45,9 +45,9 @@ date=string(Date);
 % Inputs charging algorithm family to a string 
 charge=string(fast_charge);
 % Concates to one string
-batch=strcat('*',date,'*',charge,'*.csv');
+batch_name=strcat('*',date,'*',charge,'*.csv');
 % Get a list of all CSV files in directory
-dinfo = dir(char(batch));
+dinfo = dir(char(batch_name));
 % Lists filenames for all matching CSVs
 filenames = {dinfo.name};
 batch_data = batch;

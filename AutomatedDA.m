@@ -81,13 +81,14 @@ function [Cell_Statistics, dDQdV, End_of_life, cycle] = AutomatedDA( ResultData 
     %% Plot Summary Statistics 
     %Plot Charge Capacity
     figure(1)
-    plot(1:j,smooth(C_in./max(C_in),.02,'rloess'))
+    plot(1:j,smooth(C_in./max(C_out),.02,'rloess'))
     hold on;
     %Plot Discharge Capacity
-    plot(1:j,smooth(C_out./max(C_in),.02,'rloess'),'-b')
+    plot(1:j,smooth(C_out./max(C_out),.02,'rloess'),'-b')
+    hold on 
     %plot(1:j,C_out./max(C_out))
     xlabel('Cycle Index')
-    ylabel('Fraction of Charge Capacity')
+    ylabel('Fractional Charge Capacity') % changed from "Fraction" to "Measured"
     legend('Charge Capacity', 'Discharge Capacity','Location','SW')
     %Plot Coulombic Efficiency 
     figure(3)

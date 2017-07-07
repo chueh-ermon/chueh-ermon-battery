@@ -63,7 +63,7 @@ cd 'C://Data'
     alg=t2;
     battery = struct('policy', ' ', 'barcode', ' ', 'cycles', ...
         struct('discharge_dQdVvsV', struct('V', [], 'dQdV', []), ...
-        'QvsT', struct('T', [], 'Q', []), 'NvsQ', struct('N', [], ...
+        'Qvst', struct('t', [], 'Q', [], 'C', []), 'VvsQ', struct('V', [], ...
         'Q', []), 'TvsQ', struct('T', [], 'Q', [])), ...
         'summary', struct('cycle', [], 'QDischarge', [], 'QCharge', ...
         [], 'IR', [], 'Tmax', [], 'Tavg', [], 'Tmin', [], ...
@@ -122,6 +122,28 @@ cd 'C://Data'
         end
         % ADDED
         
+        % add VvsQ to batch.battery
+        charge_capacity = Charge_cap(charge_start:charge_end);
+        volt = Voltage(charge_start:charge_end);
+        battery.cycles(j).VvsQ.Q = charge_capacity;
+        battery.cycles(j).VvsQ.V = volt;
+        
+        % add TvsQ to batch.battery
+        chrg_cap = Charge_cap(charge_start:charge_end);
+        temperature = temp(charge_start:charge_end);
+        battery.cycles(j).TvsQ.T = temperature;
+        battery.cycles(j).TvsQ.Q = chrg_cap;
+        
+        % add Qvst to batch.battery
+        cycle_t = cycle_time(charge_start:charge_end)./60;
+        current = Current_J(charge_start:charge_end)/1.1;
+        charge_cap = Charge_cap(charge_start:charge_end);
+        battery.cycles(j).Qvst.t = cycle_t;
+        battery.cycles(j).Qvst.Q = charge_cap;
+        battery.cycles(j).Qvst.C = current;
+        
+        
+        % add 
         %% Plot every 100 cycles
         if mod(j,100) == 0
             %% Plot ICA for Charge
@@ -188,6 +210,7 @@ cd 'C://Data'
                 'Color', color_array_blue{fix(j/100)+1},'LineWidth',1.5);
             cycle_t = cycle_time(charge_start:charge_end)./60;
             current = Current_J(charge_start:charge_end)/1.1;
+            charge_cap = Charge_cap(charge_start:charge_end);
             xlabel('Time (minutes)')
             ylabel('Current (C-Rate)')
             hold on
@@ -197,7 +220,7 @@ cd 'C://Data'
             ylabel('Charge Capacity (Ah)')
             xlim([0,60])
             save(strcat(charging_algorithm , '_' , cell_ID , ...
-                '_Qvst_cycle', num2str(j)), 'cycle_t', 'current')
+                '_Qvst_cycle', num2str(j)), 'cycle_t', 'current', 'charge_cap')
             % savefig(strcat(charging_algorithm , '_' , cell_ID , '_Qvst'))
             
         end

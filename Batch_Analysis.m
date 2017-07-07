@@ -50,11 +50,7 @@ batch=strcat('*',date,'*',charge,'*.csv');
 dinfo = dir(char(batch));
 % Lists filenames for all matching CSVs
 filenames = {dinfo.name};
-batteries = struct('policy', ' ', 'barcode', ' ', 'cycles', ...
-    struct('discharge_dQdVvsV', struct('V', [], 'dQdV', [])), ...
-    'summary', struct('cycle', [], 'QDischarge', [], 'QCharge', ...
-    [], 'IR', [], 'Tmax', [], 'Tavg', [], 'Tmin', [], ...
-    'chargetime', []));
+batch_data = batch;
 
 % remove deleted filenames from list 
 deletedcount = 0;
@@ -130,7 +126,7 @@ for j= 1:numel(CA_array)
             [Charge_time,dDQdV,End_of_life, cycle, ~, DQ, cell_ID1, ...
                 test_time, battery] = Cell_Analysis(ResultData, j, ...
                 CA_array{j}, barcodes{i}, charging_algorithm);
-            batteries(i) = battery;
+            batch_data.batteries(i) = battery;
             num_batt=num_batt+1;
             
             cap_array=[cap_array,DQ];
@@ -164,7 +160,7 @@ for j= 1:numel(CA_array)
     cyc_array=[cyc_array, cyc_count];
 end
 
-save(strcat(Date,'_batchdata'), 'batteries');
+save(strcat(Date,'_batchdata'), 'batch_data');
 
 %% Plot Summary figure
 close all

@@ -9,6 +9,7 @@
 %   - type 'open perl.m'
 %   - Save file as 'python.m'
 %   - Find and replace 'perl' with 'python'
+%   - Also, download & install pip1.0: https://pypi.python.org/pypi/pip/1.0
 
 %%%%%%% CHANGE THESE SETTINGS %%%
 batchdate = '2017-05-12';

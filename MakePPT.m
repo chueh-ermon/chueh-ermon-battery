@@ -34,7 +34,7 @@ cd 'C://Data'
 python('reportgenerator.py');
 
 %% Send email
-cd 'C://Users//Arbin//Box Sync//Auto-generated presentations'
+cd 'C://Users//Arbin//Box Sync//Reports'
 pdf_name = '';
 messageBody = 'Hot off the press: Check out the latest results!';
 sendemail('mchen18','BMS project: Updated results', ...

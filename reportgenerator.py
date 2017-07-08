@@ -60,7 +60,7 @@ img_path = 'contour.png'
 addImageSlide(img_path)
 
 # Add each cell, sorted by charging algorithm
-#for j=1:numel(CA_array)
+# for j=1:numel(CA_array)
 #    cd(CA_array{j})
 #    % Get a list of all image files in directory
 #    dinfo = dir('*.png');
@@ -92,7 +92,7 @@ addImageSlide(img_path)
 #end 
 
 # Autosave directory
-saveDir = 'C:\\Users\\Arbin\\Box Sync\\Auto-generated presentations'
+saveDir = 'C:\\Users\\Arbin\\Box Sync\\Reports'
 os.chdir(saveDir)
 
 # Create file names

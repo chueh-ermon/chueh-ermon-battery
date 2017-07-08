@@ -16,7 +16,8 @@ batchdate = '2017-06-30';
 charging_family='C'; % C = all data 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%
+%%%%%%% 
+% DELETE THIS CODE
 %% Run Batch Analysis for all cells
 [filenames, cap_array, CA_array, charge_time, master_capacity,barcodes, ...
     master_cycle, deg_rates]...

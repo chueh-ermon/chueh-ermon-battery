@@ -39,3 +39,4 @@ pdf_name = '';
 messageBody = 'Hot off the press: Check out the latest results!';
 sendemail('mchen18','BMS project: Updated results', ...
     messageBody,char(pdf_name));
+cd 'C://Data//chueh-ermon-battery'

@@ -12,7 +12,7 @@
 %   - Also, download & install pip1.0: https://pypi.python.org/pypi/pip/1.0
 
 %%%%%%% CHANGE THESE SETTINGS %%%
-batchdate = '2017-05-12';
+batchdate = '2017-06-30';
 charging_family='C'; % C = all data 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

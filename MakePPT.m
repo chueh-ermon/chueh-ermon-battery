@@ -40,17 +40,18 @@ cd 'C://Data//chueh-ermon-battery'
 % cd 'C://Data//chueh-ermon-battery'
 
 %% Generate images & results for all cells
+% mkdir ['C://Users//Arbin//Box Sync//Batch images//' date]
 % cd ['C://Users//Arbin//Box Sync//Batch images//' date]
-% batch.makeImages()
-% batch.makeResultTable()
-% batch.makeSummaryImages()
+% makeImages(batch)
+% makeResultTable(batch)
+% makeSummaryImages(batch)
 % cd 'C://Data//chueh-ermon-battery'
 %%%%%%%
 
 %% Run the report generator (in Python)
 % This will create the PPT and convert to PDF. It saves in the Box Sync
 % folder
-python('reportgenerator.py');
+python('reportgenerator.py'); % run python code
 
 %% Send email
 cd 'C://Users//Arbin//Box Sync//Reports'

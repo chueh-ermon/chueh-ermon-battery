@@ -36,7 +36,7 @@ def addImageSlide(imageFileName):
 today = date.today().isoformat()
 
 # make filename
-slidesFile = today + '_slides.pptx'
+slidesFile = today.i + '_slides.pptx'
 
 # Initialize presentation
 prs = Presentation()
@@ -50,8 +50,8 @@ subtitle = slide.placeholders[1]
 title.text = "Current Cycling Progress"
 subtitle.text = today
 
-# CD to directory with most recent images. Update files here
-os.chdir('C:\\Users\\Arbin\\Box Sync\\Batch images\\' + today + '\\')
+# CD to C:\Data. Update files here
+os.chdir('C:\\Users\\Arbin\\Box Sync\\Batch images\\'+date)
 
 # ADD ALL IMAGES HERE
 

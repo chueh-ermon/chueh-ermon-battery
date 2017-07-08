@@ -29,23 +29,13 @@ save([date '_' charging_family '_data.mat'],'filenames', 'cap_array', ...
 cd 'C://Data'
 
 %% Run the report generator (in Python)
-python('reportgenerator.py')
+% This will create the PPT and convert to PDF. It saves in the Box Sync
+% folder
+python('reportgenerator.py');
 
-%% Convert to PDF and email to the list
-close(slides);
-pptview(slidesFile,'converttopdf');
-pdf_name=string(slidesFile);
-pdf_name=erase(pdf_name,'.pptx');
-pdf_name=strcat(pdf_name,'.pdf');
+%% Send email
+cd 'C://Users//Arbin//Box Sync//Auto-generated presentations'
+pdf_name = '';
 messageBody = 'Hot off the press: Check out the latest results!';
 sendemail('mchen18','BMS project: Updated results', ...
     messageBody,char(pdf_name));
-
-disp(slidesFile)
-
-%% move siles to PPT folder - for now this doesn't work
-% cd 'PowerPoint_Presentations'
-% movefile fullfile('C:\Data\', slidesFile)
-% movefile fullfile('C:\Data\', pdf_name)
-% movefile which(slidesFile) 'C:\Data\PowerPoint_Presentations'
-% movefile which(pdf_name) 'C:\Data\PowerPoint_Presentations'

@@ -167,6 +167,10 @@ close all
 % Plot the summary figures 
 [deg_rates]=plot_spread(master_cycle,cap_array,charge_time,time_evol, ...
     master_capacity, CA_array, cyc_array, master_test_time);
+
+[contours]=contour(master_cycle,cap_array,charge_time,time_evol, ...
+    master_capacity, CA_array, cyc_array, master_test_time);
+
 cd 'Summary_Graphs'
 figure(51)
 savefig(strcat(Date,'_',fast_charge,'_current_spread'))

@@ -7,6 +7,7 @@ Created on Fri Jul  7 12:10:30 2017
 """
 
 # Imports
+import os
 from pptx import Presentation
 from pptx.util import Inches
 
@@ -14,41 +15,6 @@ import comtypes.client
 
 #import time
 from datetime import date
-
-# Get today's date
-today = date.today()
-
-# make filename
-slidesFile = today.isoformat() + '_slides.pptx'
-
-# Initialize presentation
-prs = Presentation()
-title_slide_layout = prs.slide_layouts[0]
-slide = prs.slides.add_slide(title_slide_layout)
-title = slide.shapes.title
-subtitle = slide.placeholders[1]
-
-title.text = "Current Cycling Progress"
-subtitle.text = today.isoformat()
-
-img_path = 'test.png'
-
-blank_slide_layout = prs.slide_layouts[6]
-slide = prs.slides.add_slide(blank_slide_layout)
-
-left = top = Inches(0)
-Width = Inches(13.33)
-Height = Inches(7.41)
-pic = slide.shapes.add_picture(img_path, left, top, height=Height, width=Width)
-#
-#left = Inches(5)
-#height = Inches(5.5)
-#pic = slide.shapes.add_picture(img_path, left, top, height=height)
-
-prs.save(slidesFile)
-
-PPTtoPDF(slidesFile,'newpdf.pdf')
-
 
 def PPTtoPDF(inputFileName, outputFileName, formatType = 32):
     powerpoint = comtypes.client.CreateObject("Powerpoint.Application")
@@ -61,50 +27,39 @@ def PPTtoPDF(inputFileName, outputFileName, formatType = 32):
     deck.Close()
     powerpoint.Quit()
 
-#slidesFile = [date '_' charging_family '_slides.pptx']
-#slides = Presentation(slidesFile)
-#
-# 
-#slide1 = add(slides,'Title Slide')
-#replace(slide1,'Title','Current Cycling Progress')
-#replace(slide1,'Subtitle',{'Arbin LBT',date})
-#
-## Add Summary Figures 
-#summary_slide = add(slides,'Blank');
-## TODO: could this find a picture in a different directory and add it?
-#cd 'Summary_Graphs'
-#pic = Picture(which(strcat(batchdate,'_',charging_family, ...
-#    '_current_spread.png')));
-#cd 'C://Data'
-#pic.X = '0in';
-#pic.Y = '0in';
-#pic.Width = '13.33in';
-#pic.Height = '7.41in';
-#add(summary_slide,pic);
-#
-#summary_slide2 = add(slides,'Blank');
-#cd 'Summary_Graphs'
-#pic = Picture(which(strcat(batchdate,'_',charging_family, ...
-#    '_time_vs_capacity.png')));
-#cd 'C://Data'
-#pic.X = '0in';
-#pic.Y = '0in';
-#pic.Width = '13.33in';
-#pic.Height = '7.41in';
-#add(summary_slide2,pic);
-#
-#summary_slide3 = add(slides,'Blank');
-#cd 'Summary_Graphs'
-#pic = Picture(which(strcat(batchdate,'_',charging_family, ...
-#    '_degradation_rate.png')));
-#cd 'C://Data'
-#pic.X = '0in';
-#pic.Y = '0in';
-#pic.Width = '13.33in';
-#pic.Height = '7.41in';
-#add(summary_slide3,pic);
-#
-## Add Individual Cells in by Charging Algorithm
+def addImageSlide(imageFileName):
+	blank_slide_layout = prs.slide_layouts[6]
+	slide = prs.slides.add_slide(blank_slide_layout)
+	pic = slide.shapes.add_picture(img_path, 0, 0, height=prs.slide_height, width=prs.slide_width)
+
+# Get today's date
+today = date.today()
+
+# make filename
+slidesFile = today.isoformat() + '_slides.pptx'
+
+# Initialize presentation
+prs = Presentation()
+prs.slide_height = 5143500 # Widescreen aspect ratio
+title_slide_layout = prs.slide_layouts[0]
+slide = prs.slides.add_slide(title_slide_layout)
+title = slide.shapes.title
+subtitle = slide.placeholders[1]
+
+# Create title slide
+title.text = "Current Cycling Progress"
+subtitle.text = today.isoformat()
+
+# CD to C:\Data. Update files here
+os.chdir('C:\Data')
+
+# ADD ALL IMAGES HERE
+
+# Add summary slide
+img_path = 'contour.png'
+addImageSlide(img_path)
+
+# Add each cell, sorted by charging algorithm
 #for j=1:numel(CA_array)
 #    cd(CA_array{j})
 #    % Get a list of all image files in directory
@@ -135,3 +90,16 @@ def PPTtoPDF(inputFileName, outputFileName, formatType = 32):
 #    end
 #    cd 'C://Data'
 #end 
+
+# Autosave directory
+saveDir = 'C:\\Users\\Arbin\\Box Sync\\Auto-generated presentations'
+os.chdir(saveDir)
+
+# Create file names
+slidesFileFull = saveDir + '\\' + slidesFile
+slidesFileFullPDF = saveDir + '\\' + slidesFile.replace('pptx','pdf')
+
+# Save powerpoint
+prs.save(slidesFileFull)
+# Convert to PDF
+PPTtoPDF(slidesFileFull,slidesFileFullPDF)

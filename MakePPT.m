@@ -1,32 +1,50 @@
 %% MakePPT.m...
 %   - Runs Batch_Analysis
 %   - Saves data to .mat
+%   - Makes images
 %   - Makes PPT & converts to PDF
 %   - Emails results
-% Peter Attia and Nick Perkins
+% Nick Perkins, Zi Yang, Michael Chen, Peter Attia
 
 % For this file to successfully run, please do the following:
-%   - type 'open perl.m'
-%   - Save file as 'python.m'
-%   - Find and replace 'perl' with 'python'
-%   - Also, download & install pip1.0: https://pypi.python.org/pypi/pip/1.0
+%   - Ensure 'python.m' is in the same folder
+%   - Also, ensure the required Python libraries are installed (see
+%   reportgenerator.py)
 
 %%%%%%% CHANGE THESE SETTINGS %%%
 batchdate = '2017-06-30';
 charging_family='C'; % C = all data 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%
 %% Run Batch Analysis for all cells
 [filenames, cap_array, CA_array, charge_time, master_capacity,barcodes, ...
     master_cycle, deg_rates]...
     =Batch_Analysis(batchdate,charging_family);
 
 %% Save raw data to .mat file
-cd 'Raw_Matlab_Data'
+cd 'C://Users//Arbin//Box Sync//Reports'
 save([date '_' charging_family '_data.mat'],'filenames', 'cap_array', ...
     'CA_array', 'charge_time', 'master_capacity','barcodes', ...
     'master_cycle','deg_rates');
-cd 'C://Data'
+cd 'C://Data//chueh-ermon-battery'
+%%%%%%%
+
+%%%%%%%
+% CHANGE TO:
+%% Run Batch Analysis for all cells
+% batch = Batch_Analysis(batchdate,charging_family)
+% cd 'C://Users//Arbin//Box Sync//Batch data'
+% save([date '_' charging_family '_batchdata.mat'],batch)
+% cd 'C://Data//chueh-ermon-battery'
+
+%% Generate images & results for all cells
+% cd ['C://Users//Arbin//Box Sync//Batch images//' date]
+% batch.makeImages()
+% batch.makeResultTable()
+% batch.makeSummaryImages()
+% cd 'C://Data//chueh-ermon-battery'
+%%%%%%%
 
 %% Run the report generator (in Python)
 % This will create the PPT and convert to PDF. It saves in the Box Sync

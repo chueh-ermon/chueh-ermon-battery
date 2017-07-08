@@ -53,7 +53,8 @@ python('reportgenerator.py');
 
 %% Send email
 cd 'C://Users//Arbin//Box Sync//Reports'
-pdf_name = '';
+dateFormat = char(datetime('now','Format','yyyy-MM-dd')); % e.g. 2017-07-30
+pdf_name = [dateFormat '_slides'];
 messageBody = 'Hot off the press: Check out the latest results!';
 sendemail('mchen18','BMS project: Updated results', ...
     messageBody,char(pdf_name));

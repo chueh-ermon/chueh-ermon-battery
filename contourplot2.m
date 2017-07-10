@@ -34,19 +34,19 @@ end
 for i=1:length(time_vector)
     if time_vector(i) == 10
         subplot(2,length(time_vector)/2,4)
-        Q1=30:0.1:79.5;
-        CC1=4.8:0.02:6;
+        Q1=0.5:0.1:79.5;
+        CC1=3.6:0.02:6;
         [X,Y] = meshgrid(CC1,Q1);
         CC2 = [(time_vector(i) - (Y./100).*(60./X))./(60.*(0.8-(Y./100)))].^(-1);
-        v =[3.8 4 4.2];
+        v = [3 3.5 4 4.5 4.75 4.8 4.85 5 5.5 6];
         contour(X,Y,CC2,v,'LineWidth',2,'ShowText','on')
     elseif time_vector(i) == 11
         subplot(2,length(time_vector)/2,3)
         Q1=0:0.02:80;
-        CC1=4.35:0.02:6.2;
+        CC1=4:0.02:6.2;
         [X,Y] = meshgrid(CC1,Q1);
         CC2 = 1./((time_vector(i) - ((Y./100).*(60./X)) )./ (60.*(0.8-(Y./100))));
-        v =[3.8 4 4.2];
+        v = [3 3.5 3.8 4 4.2 4.5 4.8 5 5.5 6];
         contour(X,Y,CC2,v,'LineWidth',2,'ShowText','on')
     elseif time_vector(i) == 12
         subplot(2,length(time_vector)/2,2)
@@ -54,7 +54,7 @@ for i=1:length(time_vector)
         CC1=3:0.01:6;
         [X,Y] = meshgrid(CC1,Q1);
         CC2 = [(time_vector(i) - (Y./100).*(60./X))./(60.*(0.8-(Y./100)))].^(-1);
-        v =[3.8 4 4.2];
+        v = [3 3.5 3.8 4 4.2 4.5 4.8 5 5.5 6];
         contour(X,Y,CC2,v,'LineWidth',2,'ShowText','on')
         
     else
@@ -63,7 +63,7 @@ for i=1:length(time_vector)
         CC1=3:0.01:4;
         [X,Y] = meshgrid(CC1,Q1);
         CC2 = 1./((time_vector(i) - ((Y./100).*(60./X)) )./ (60.*(0.8-(Y./100))));
-        v =[ 3.8 4 4.2];
+        v = [3 3.5 3.8 4 4.2 4.5 4.8 5 5.5 6];
         contour(X,Y,CC2,v,'LineWidth',2,'ShowText','on')
         %y = 100.*(((time_vector(i)./60) - (0.8.*v(1))).*CC1)./(1-(CC1.*v(1)));
         %y = (5.*CC1.*(48.*v(1)-time_vector(i)))./(3.*(CC1-v(1)));

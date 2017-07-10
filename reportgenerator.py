@@ -7,16 +7,18 @@ Created on Fri Jul  7 12:10:30 2017
 """
 
 # Imports
-import os
-from pptx import Presentation
+import os # file i/o operations
+import glob # file i/o operations
+from datetime import time# finding today's date
+from pptx import Presentation # creating the PPT
 from pptx.util import Inches
-
-import comtypes.client
-
-#import time
-from datetime import date
+import comtypes.client # for opening PowerPoint from python
 
 def PPTtoPDF(inputFileName, outputFileName, formatType = 32):
+    """
+    Converts a PPT file to a PDF by opening PowerPoint, opening the file, and 
+    then saving as a PowerPoint. Requires Windows. 
+    """
     powerpoint = comtypes.client.CreateObject("Powerpoint.Application")
     powerpoint.Visible = 1
 
@@ -28,20 +30,23 @@ def PPTtoPDF(inputFileName, outputFileName, formatType = 32):
     powerpoint.Quit()
 
 def addImageSlide(imageFileName):
-	blank_slide_layout = prs.slide_layouts[6]
-	slide = prs.slides.add_slide(blank_slide_layout)
-	pic = slide.shapes.add_picture(img_path, 0, 0, height=prs.slide_height, width=prs.slide_width)
+    """
+    Adds a full-screen image to a blank full-screen slide.
+    """
+    blank_slide_layout = prs.slide_layouts[6]
+    slide = prs.slides.add_slide(blank_slide_layout)
+    pic = slide.shapes.add_picture(img_path, 0, 0, height=prs.slide_height, width=prs.slide_width)
 
-# Get today's date
-today = date.today().isoformat()
+# Get today's date, formatted to MATLAB's default (e.g. 2017-Jul-09)
+today = date.today().strftime('%d-%b-%Y')
 
 # make filename
-slidesFile = today + '_slides.pptx'
+reportFile = today + '_report.pptx'
 
 # Initialize presentation
 prs = Presentation()
 prs.slide_height = 5143500 # Widescreen aspect ratio
-title_slide_layout = prs.slide_layouts[0]
+title_slide_layout = prs.slide_layouts[0] # add title slide
 slide = prs.slides.add_slide(title_slide_layout)
 title = slide.shapes.title
 subtitle = slide.placeholders[1]
@@ -50,56 +55,26 @@ subtitle = slide.placeholders[1]
 title.text = "Current Cycling Progress"
 subtitle.text = today
 
-# CD to directory with most recent images. Update files here
+# CD to directory with most recent images
 os.chdir('C:\\Users\\Arbin\\Box Sync\\Batch images\\' + today + '\\')
-
-# ADD ALL IMAGES HERE
 
 # Add summary slide
 img_path = 'contour.png'
 addImageSlide(img_path)
 
-# Add each cell, sorted by charging algorithm
-# for j=1:numel(CA_array)
-#    cd(CA_array{j})
-#    % Get a list of all image files in directory
-#    dinfo = dir('*.png');
-#    filenames = {dinfo.name};
-#
-#    seriesindex = '1';
-#    for i = 1:length(filenames)
-#        % Add section header slide for separation
-#        if ~strcmp(filenames{i}(1),seriesindex)
-#            % Create title s
-#            t = CA_array{j};
-#            t2 = strrep(t, '_' , '.' );
-#            t2 = strrep(t2, '-' , '(' );
-#            t2 = strrep(t2, 'per.' , '%)-' );
-#            sectionSlide = add(slides,'Section Header');
-#            replace(sectionSlide,'Title',t2);
-#            seriesindex = filenames{i}(1);
-#        end
-#
-#        pictureSlide = add(slides,'Blank');
-#        pic = Picture(which(filenames{i}));
-#        pic.X = '0in';
-#        pic.Y = '0in';
-#        pic.Width = '13.33in';
-#        pic.Height = '7.41in';
-#        add(pictureSlide,pic);
-#    end
-#    cd 'C://Data'
-#end 
+# Add each cell "spec sheet" .png files in this directory
+for file in glob.glob('*.png'):
+    addImageSlide(file)
 
 # Directory for saving reports
 saveDir = 'C:\\Users\\Arbin\\Box Sync\\Reports'
 os.chdir(saveDir)
 
 # Create file names
-slidesFileFull = saveDir + '\\' + slidesFile
-slidesFileFullPDF = saveDir + '\\' + slidesFile.replace('pptx','pdf')
+reportFileFull = saveDir + '\\' + reportFile
+reportFileFullPDF = saveDir + '\\' + reportFile.replace('pptx','pdf')
 
 # Save powerpoint
-prs.save(slidesFileFull)
+prs.save(reportFileFull)
 # Convert to PDF
-PPTtoPDF(slidesFileFull,slidesFileFullPDF)
+PPTtoPDF(reportFileFull,reportFileFullPDF)

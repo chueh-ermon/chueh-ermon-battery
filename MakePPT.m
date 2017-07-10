@@ -24,7 +24,7 @@ charging_family='C'; % C = all data
     =Batch_Analysis(batchdate,charging_family);
 
 %% Save raw data to .mat file
-cd 'C://Users//Arbin//Box Sync//Reports'
+cd 'C://Users//Arbin//Box Sync//Batch data'
 save([date '_' charging_family '_data.mat'],'filenames', 'cap_array', ...
     'CA_array', 'charge_time', 'master_capacity','barcodes', ...
     'master_cycle','deg_rates');
@@ -55,8 +55,7 @@ python('reportgenerator.py'); % run python code
 
 %% Send email
 cd 'C://Users//Arbin//Box Sync//Reports'
-dateFormat = char(datetime('now','Format','yyyy-MM-dd')); % e.g. 2017-07-30
-pdf_name = [dateFormat '_slides'];
+pdf_name = [date '_report'];
 messageBody = 'Hot off the press: Check out the latest results!';
 sendemail('mchen18','BMS project: Updated results', ...
     messageBody,char(pdf_name));

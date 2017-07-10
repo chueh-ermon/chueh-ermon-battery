@@ -30,6 +30,7 @@ save([date '_' charging_family '_data.mat'],'filenames', 'cap_array', ...
     'master_cycle','deg_rates');
 cd 'C://Data//chueh-ermon-battery'
 %%%%%%%
+<<<<<<< HEAD
 
 %%%%%%%
 % CHANGE TO:
@@ -45,6 +46,26 @@ cd 'C://Data//chueh-ermon-battery'
 % makeImages(batch)
 % makeResultTable(batch)
 % makeSummaryImages(batch)
+=======
+
+%%%%%%%
+% CHANGE TO:
+%% Run Batch Analysis for all cells
+% batch = Batch_Analysis(batchdate,charging_family)
+% cd 'C://Users//Arbin//Box Sync//Batch data'
+% save([date '_' charging_family '_batchdata.mat'],batch)
+% cd 'C://Data//chueh-ermon-battery'
+
+%% Generate images & results for all cells
+% mkdir ['C://Users//Arbin//Box Sync//Batch images//' date]
+% cd ['C://Users//Arbin//Box Sync//Batch images//' date]
+% makeImages(batch)
+% makeSummaryImages(batch)
+% cd 'C://Data//chueh-ermon-battery'
+
+% cd 'C://Users//Arbin//Box Sync//Result tables'
+% makeResultTable(batch)
+>>>>>>> 1849c1e09930de3450a8eb46434e387a0b9acbf5
 % cd 'C://Data//chueh-ermon-battery'
 %%%%%%%
 

@@ -43,8 +43,11 @@ cd 'C://Data//chueh-ermon-battery'
 % mkdir ['C://Users//Arbin//Box Sync//Batch images//' date]
 % cd ['C://Users//Arbin//Box Sync//Batch images//' date]
 % makeImages(batch)
-% makeResultTable(batch)
 % makeSummaryImages(batch)
+% cd 'C://Data//chueh-ermon-battery'
+
+% cd 'C://Users//Arbin//Box Sync//Result tables'
+% makeResultTable(batch)
 % cd 'C://Data//chueh-ermon-battery'
 %%%%%%%
 

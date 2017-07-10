@@ -11,7 +11,9 @@ function [filenames, cap_array, CA_array, charge_time, master_capacity, ...
 %   - Example Batch_Analysis('Date started (YYYY-MM-DD)', 'Charge
 %     condition' ex. 'C' for all of them or '5_4C' for 5.4 C step.
 close all
+
 cd 'C://Data'
+
 
 %% Initialize Summary Arrays and values
 % Holds all Discharge dQdV curves
@@ -43,11 +45,12 @@ date=string(Date);
 % Inputs charging algorithm family to a string 
 charge=string(fast_charge);
 % Concates to one string
-batch=strcat('*',date,'*',charge,'*.csv');
+batch_name=strcat('*',date,'*',charge,'*.csv');
 % Get a list of all CSV files in directory
-dinfo = dir(char(batch));
+dinfo = dir(char(batch_name));
 % Lists filenames for all matching CSVs
 filenames = {dinfo.name};
+batch_data = batch;
 
 % remove deleted filenames from list 
 deletedcount = 0;
@@ -57,7 +60,7 @@ for i = 1:numel(filenames)
     end
 end
 filenames = filenames(1:numel(filenames)-deletedcount);
-foldername = cell(1,numel(filenames));
+foldername = cell(1,numel(filenames)); % TODO: can we delete this
 % In case there were no files found.
 if numel(filenames) == 0
     disp('No files match query')
@@ -66,7 +69,7 @@ end
 for i=1:numel(filenames)
     % Finds if .csv is a metadata
     meta=strfind(filenames{i},'Meta');
-    if isempty(meta) == 0
+    if isempty(meta) == 0 % TODO: can we make this more clear?
         % If so then read the cell barcode from the metadata
         [~, text_data] = xlsread(filenames{i});
         cell_ID=string(text_data{2,10});
@@ -116,11 +119,14 @@ for j= 1:numel(CA_array)
             % Update on progress 
             tic
             disp(['Starting processing of file ' num2str(i) ' of ' ...
-            num2str(numel(test_files)) ':  ' filename])
+                num2str(numel(test_files)) ':  ' filename])
             %% Run CSV Analysis 
             ResultData = csvread(strcat(thisdir,'\',test_files{i}),1,1);
-            [Charge_time,dDQdV,End_of_life, cycle, ~, DQ, cell_ID1, test_time]...
-                =BatchDA(ResultData, j, CA_array{j}, barcodes{i});
+            cd 'chueh-ermon-battery'
+            [Charge_time,dDQdV,End_of_life, cycle, ~, DQ, cell_ID1, ...
+                test_time, battery] = Cell_Analysis(ResultData, j, ...
+                CA_array{j}, barcodes{i}, charging_algorithm);
+            batch_data.batteries(i) = battery;
             num_batt=num_batt+1;
             
             cap_array=[cap_array,DQ];
@@ -153,11 +159,19 @@ for j= 1:numel(CA_array)
     master_capacity=[master_capacity,rem_cap];
     cyc_array=[cyc_array, cyc_count];
 end
+
+save(strcat(Date,'_batchdata'), 'batch_data');
+
 %% Plot Summary figure
 close all
 % Plot the summary figures 
-[deg_rates]=plot_spread(master_cycle,cap_array,charge_time,time_evol,master_capacity,... 
-    CA_array, cyc_array, master_test_time);
+[deg_rates]=plot_spread(master_cycle,cap_array,charge_time,time_evol, ...
+    master_capacity, CA_array, cyc_array, master_test_time);
+
+[contours]=contour(master_cycle,cap_array,charge_time,time_evol, ...
+    master_capacity, CA_array, cyc_array, master_test_time);
+
+cd 'Summary_Graphs'
 figure(51)
 savefig(strcat(Date,'_',fast_charge,'_current_spread'))
 print(strcat(Date,'_',fast_charge,'_current_spread'),'-dpng')
@@ -167,5 +181,5 @@ print(strcat(Date,'_',fast_charge,'_time_vs_capacity'),'-dpng')
 figure(50)
 savefig(strcat(Date,'_',fast_charge,'_degradation_rate'))
 print(strcat(Date,'_',fast_charge,'_degradation_rate'),'-dpng')
+cd(thisdir)
 end
-
